@@ -20,7 +20,7 @@ install_dependencies:
    - docker
   script:
     - apk add --no-cache nodejs npm  # Install Node.js and npm in Alpine image
-    - cd Client
+    - cd client
     - npm install  
 
 build:
@@ -28,7 +28,7 @@ build:
   tags: 
    - docker
   script:
-    - cd Client
+    - cd client
     - npm install
     - npm run build  # Build the Vue.js app with Vite
 
@@ -37,7 +37,7 @@ deploy:
   tags:
     - docker
   script:
-   - cd Client
+   - cd client
    - npm install
  
      
