@@ -15,7 +15,7 @@ install_dependencies:
    - docker
   script:
     - apk add --no-cache nodejs npm  # Install Node.js and npm in Alpine image
-    - cd client
+    - cd Client
     - npm install  
 
 build:
@@ -32,7 +32,7 @@ deploy:
   tags:
     - docker
   script:
-   - cd client
+   - cd Client
    - npm install
  
      
