@@ -36,4 +36,18 @@ router.post('/api/users', async function (req, res, next) {
 });
 
 
+//Get specific User
+router.get('/api/users/:username', async function (req, res) {
+    try{
+    var username = req.params.username;
+    const user = await User.findOne({username : username});
+    if (!user){
+        return res.status(404).json({"message": "No such user"});
+    }
+    res.json(user);
+} catch (err) {
+    res.status(500).json({"message" : "Server error", "error": err.message});
+}
+});
+
 module.exports = router;
