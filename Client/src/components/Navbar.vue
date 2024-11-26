@@ -58,3 +58,53 @@
   }
   </script>
   
+  <style scoped>
+  .brand {
+    color: #E0E0E0 !important;
+    font-size: 28px;
+    margin-right: 5%;
+    margin-left: 5%;
+    font-family: 'Source Sans Pro';
+  }
+  
+  .buttonsNav {
+    font-family: sans-serif;
+    gap: 30px;
+  }
+  
+  .username {
+    font-size: 13px;
+    font-weight: bold;
+    color: whitesmoke;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-family: Tahoma;
+  }
+  
+  .buttonsNav a,
+  router-link {
+    color: #E0E0E0;
+    text-decoration: none;
+    font-family: Tahoma;
+  }
+  
+  .buttonsNav a:hover,
+  router-link:hover {
+    color: #d1da8e;
+  }
+  
+  .custom-dropdown {
+    padding-right: 30px;
+  }
+  
+  .nav-collapse {
+    margin-right: 5%;
+  }
+  
+  .custom-dropdown .dropdown-item {
+    color: #E0E0E0;
+    background-color: transparent;
+  }
+  
+  </style>
+  
