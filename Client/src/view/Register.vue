@@ -47,4 +47,71 @@
     </div>
   </template>
   
+  <script>
+  export default {
+    name: 'Register',
+    data() {
+      return {
+        input: {
+          username: "",
+          password: ""
+        },
+        message: "",  
+        showToast: false,  
+        toastMessage: ""  
+      };
+    },
+    methods: {
+      async register() {
+        try {
+          const newUser = {
+            username: this.input.username,
+            password: this.input.password
+          };
   
+          // Call the backend to create a new user
+          const backendResponse = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser)  
+          });
+  
+          if (backendResponse.ok) {
+            const userData = await backendResponse.json();
+            console.log('User registered successfully:', userData);
+  
+            this.toastMessage = "Registration successful! Redirecting to login page";
+            this.showToast = true;
+  
+            // Redirect to login 
+            setTimeout(() => {
+              this.$router.push('/LogIn');
+            }, 500);  
+          } else {
+            const errorData = await backendResponse.json();
+            this.message = errorData.message || 'An error occurred during registration.';
+            console.error('Error registering user:', this.message);
+            
+  
+            // Show error toast
+            this.toastMessage = "Registration failed: " + this.message;
+            this.showToast = true;
+            setTimeout(() => this.showToast = false, 3000);
+          }
+        } catch (error) {
+          console.error('Error registering user:', error);
+          this.message = 'An error occurred while registering. Please try again.';
+  
+          // Show error toast
+          this.toastMessage = "Error: " + this.message;
+          this.showToast = true;
+          setTimeout(() => this.showToast = false, 3000);
+        }
+      }
+    }
+  };
+  </script>
+  
+
