@@ -42,4 +42,74 @@
   </div>
   </template>
   
+  <script>
+  export default {
+      name: 'LogIn',
+      data() {
+          return {
+              input: {
+                  username: "",
+                  password: ""
+              },
+              toastMessage: "",
+              showToast: false
+          };
+      },
+      methods: {
+          async login() {
+              try {
+                  // Construct query parameters (username and password)
+                  const queryParams = new URLSearchParams({
+                      username: this.input.username,
+                  }).toString();
+  
+                  // Send GET request with the login data
+                  const response = await fetch(`/api/users?${queryParams}`, {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
+                  });
+  
+                  if (response.ok) {
+                      const responseData = await response.json();
+  
+                      // Check if a user was found
+                      if (responseData.users && responseData.users.length > 0) {
+                          const user = responseData.users[0];
+  
+                          // Check if the input password matches the one from the response
+                          if (user.password === this.input.password) {
+                              // Save the username to local storage
+                              localStorage.setItem('username', this.input.username);
+  
+                              // Success message and redirect to homepage
+                              this.showToast = true;
+                              this.toastMessage = 'Login successful!';
+                             
+                                  this.showToast = false;
+                                  this.$router.push('/homepage');
+                          } else {
+                              // Password mismatch
+                              this.showToast = true;
+                              this.toastMessage = 'Invalid password.';
+                              setTimeout(() => this.showToast = false, 3000); 
+                          }
+                      } else {
+                          // No matching user found
+                          this.showToast = true;
+                          this.toastMessage = 'Invalid username.';
+                          setTimeout(() => this.showToast = false, 3000); 
+                      }
+                  } 
+              } catch (error) {
+                  console.error('Error logging in:', error);
+                  this.showToast = true;
+                  this.toastMessage = 'An error occurred while logging in. Please try again.';
+                  setTimeout(() => this.showToast = false, 3000); 
+              }
+          }
+      }
+  };
+  </script>
   
