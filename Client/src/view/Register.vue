@@ -115,3 +115,64 @@
   </script>
   
 
+<style scoped>
+.username {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.password {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.custom-button {
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.custom-input {
+  border-radius: 20px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+}
+
+.text-center {
+  border-radius: 20px;
+  margin-bottom: 230px;
+}
+
+.mb-3 {
+  padding-top: 12%;
+}
+
+.form {
+  border-radius: 20px;
+}
+
+.title {
+  text-align: center;
+  color: White;
+  font-size: 16px;
+  padding: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.register-wrapper {
+  background-image: url('@/assets/logInBack.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  margin: 0;
+}
+
+.logIn {
+  color: rgb(49, 49, 49);
+  font-size: 14px;
+}
+
+.text-center {
+  width: 700px;
+  height: 600px;
+}
+</style>
