@@ -27,4 +27,25 @@ router.post('/api/session', async function (req, res, next) {
     }
 });
 
+//Get specific session
+router.get('/api/session/:sessionId', async function (req, res) {
+    try {
+
+        const sessionId = req.params.sessionId;
+
+        const session = await Session.findById(sessionId);
+
+        if (!session) {
+            return res.status(404).json({ "message": "No such session" });
+        }
+        res.json(session);
+    } catch (err) {
+        console.error("Error occurred while fetching session:", err);
+        res.status(500).json({
+            message: "Server error while fetching session",
+            error: err.message
+        });
+    }
+});
+
 module.exports = router;
