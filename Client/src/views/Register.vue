@@ -1,156 +1,132 @@
 <template>
-    <div class="register-wrapper">
-      <div class="title">
-        <h1>RoomCount</h1>
-      </div>
-      <BContainer class="d-flex justify-content-center align-items-center vh-100">
-        <BCard class="text-center">
-          <h1 class="mb-3">Register an Account</h1>
-          <p class="mb-4">Join RoomCount today and start managing and tracking your rooms</p>
-          <BForm @submit.prevent="register">
-            <div class="email d-flex justify-content-center">
-              <BFormInput id="email" v-model="input.email" type="email" placeholder="Enter your email"
-                required class="custom-input w-75"></BFormInput>
-            </div>
-            <div class="username d-flex justify-content-center">
-              <BFormInput id="username" v-model="input.username" type="text" placeholder="Enter your username"
-                required class="custom-input w-75"></BFormInput>
-            </div>
-            <div class="password d-flex justify-content-center">
-              <BFormInput id="password" v-model="input.password" type="password" placeholder="Enter your password"
-                required class="custom-input w-75"></BFormInput>
-            </div>
-            <BButton type="submit" variant="warning" class="custom-button w-75">Register</BButton>
-          </BForm>
-  
-          <p class="logIn mt-3">
-            If you already have an account, <router-link to="/LogIn">Sign in here</router-link>
-          </p>
-  
-        </BCard>
-      </BContainer>
-  
-      <!-- Toast Notification -->
-      <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="liveToast" class="toast bg-dark" role="alert" style="color: white;" aria-live="assertive"
-          aria-atomic="true" :class="{'show': showToast}">
-          <div class="toast-header bg-dark" style="color: white;">
-            <strong class="me-auto">BeerStep</strong>
-            <small>Just now</small>
-            <BButton type="button" class="btn-close" @click="showToast = false" aria-label="Close"></BButton>
-          </div>
-          <div class="toast-body">
-            {{ toastMessage }}
-          </div>
-        </div>
-      </div>
+  <div class="register-wrapper">
+    <div class="title">
+      <h1>RoomCount</h1>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'Register',
-    data() {
-      return {
-        input: {
-          username: "",
-          password: ""
-        },
-        message: "",  
-        showToast: false,  
-        toastMessage: ""  
-      };
-    },
-    methods: {
-      async register() {
-        try {
-          const newUser = {
-            username: this.input.username,
-            password: this.input.password
-          };
-  
-          // Call the backend to create a new user
-          const backendResponse = await fetch('/api/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newUser)  
-          });
-  
-          if (backendResponse.ok) {
-            const userData = await backendResponse.json();
-            console.log('User registered successfully:', userData);
-  
-            this.toastMessage = "Registration successful! Redirecting to login page";
-            this.showToast = true;
-  
-            // Redirect to login 
-            setTimeout(() => {
-              this.$router.push('/LogIn');
-            }, 500);  
-          } else {
-            const errorData = await backendResponse.json();
-            this.message = errorData.message || 'An error occurred during registration.';
-            console.error('Error registering user:', this.message);
-            
-  
-            // Show error toast
-            this.toastMessage = "Registration failed: " + this.message;
-            this.showToast = true;
-            setTimeout(() => this.showToast = false, 3000);
-          }
-        } catch (error) {
-          console.error('Error registering user:', error);
-          this.message = 'An error occurred while registering. Please try again.';
-  
-          // Show error toast
-          this.toastMessage = "Error: " + this.message;
+    <BContainer class="container">
+      <BCard class="text-center">
+        <h1 class="mb-3">Register an Account</h1>
+        <p class="mb-4">Join RoomCount today and start managing and tracking your rooms effortlessly.</p>
+        <BForm @submit.prevent="register">
+          <div class="email d-flex justify-content-center">
+            <BFormInput id="email" v-model="input.email" type="email" 
+              placeholder="Enter your email" required class="custom-input"></BFormInput>
+          </div>
+          <div class="username d-flex justify-content-center">
+            <BFormInput id="username" v-model="input.username" type="text" 
+              placeholder="Enter your username" required class="custom-input"></BFormInput>
+          </div>
+          <div class="password d-flex justify-content-center">
+            <BFormInput id="password" v-model="input.password" type="password" 
+              placeholder="Enter your password" required class="custom-input"></BFormInput>
+          </div>
+          <BButton type="submit" variant="warning" class="custom-button">Register</BButton>
+        </BForm>
+
+        <p class="logIn mt-3">
+          If you already have an account, <router-link to="/">Sign in here</router-link>
+        </p>
+      </BCard>
+    </BContainer>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Register',
+  data() {
+    return {
+      input: {
+        email: "",
+        username: "",
+        password: ""
+      },
+      toastMessage: "",
+      showToast: false
+    };
+  },
+  methods: {
+    async register() {
+      try {
+        const newUser = {
+          email: this.input.email,
+          username: this.input.username,
+          password: this.input.password
+        };
+
+        const backendResponse = await fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newUser)
+        });
+
+        if (backendResponse.ok) {
+          const userData = await backendResponse.json();
+          this.toastMessage = "Registration successful! Redirecting to login page";
+          this.showToast = true;
+
+          setTimeout(() => {
+            this.$router.push('/LogIn');
+          }, 500);
+        } else {
+          const errorData = await backendResponse.json();
+          this.toastMessage = "Registration failed: " + (errorData.message || 'Unknown error');
           this.showToast = true;
           setTimeout(() => this.showToast = false, 3000);
         }
+      } catch (error) {
+        console.error('Error registering user:', error);
+        this.toastMessage = "An error occurred during registration. Please try again.";
+        this.showToast = true;
+        setTimeout(() => this.showToast = false, 3000);
       }
     }
-  };
-  </script>
-  
+  }
+};
+</script>
 
 <style scoped>
-.username {
+.email, .username, .password {
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
-.password {
-  padding-top: 10px;
-  padding-bottom: 20px;
-}
-
 .custom-button {
+  width: 78%;
   border-radius: 20px;
-  padding: 10px;
+  padding: 15px;
+  border: none;
+  background-color: orange;
 }
 
 .custom-input {
   border-radius: 20px;
-  padding: 10px;
+  padding: 13px;
   border: 1px solid #ced4da;
+  width: 75%;
 }
 
 .text-center {
   border-radius: 20px;
-  margin-bottom: 230px;
+  margin-bottom: 390px;
+  background-color: white;
 }
 
 .mb-3 {
   padding-top: 12%;
+  font-weight: 400;
+  font-size: 42px;
+  font-family: sans-serif;
 }
 
-.form {
-  border-radius: 20px;
+.mb-4 {
+  font-family: Tahoma;
 }
 
 .title {
+  font-family: Tahoma;
   text-align: center;
   color: White;
   font-size: 16px;
@@ -159,7 +135,7 @@
 }
 
 .register-wrapper {
-  background-image: url('@/assets/logInBack.jpg');
+  background-image: url('../assets/background.jpg');
   background-size: cover;
   background-position: center;
   height: 100%;
@@ -169,10 +145,19 @@
 .logIn {
   color: rgb(49, 49, 49);
   font-size: 14px;
+  font-family: Tahoma;
 }
 
 .text-center {
   width: 700px;
   height: 600px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
 }
 </style>
