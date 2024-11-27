@@ -1,30 +1,30 @@
 <template>
-  <div class="main bg-dark" style="min-height: 100vh;">
+  <div class="main " style="min-height: 100vh;">
     <BRow>
-      <BContainer fluid class="beerBack" />
-      <BCol class="overlay">
-        <div class="stats">
-          <h2>{{ stepsNeeded }}</h2>
-           <p>Entries</p>
-        </div>
-        <router-link to="/" class="btn btn-danger w-25">Session Page</router-link>
-      </BCol>
-
       <BCol class="quotes text-center">
-        <p style="color: #ebb112;">Session</p>
-        <BCard class="card-quotes">
-        
+        <p style="color: whitesmoke; font-size: 34px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);">Session</p>
+        <BCard class="card">
+            <div class="stats">
+              <h2>{{ Entries }}</h2>
+              <p>Entries</p>
+            </div>
+            <BButton class="btn btn-success w-50">Start Session</BButton>
+            <BButton class="btn btn-danger w-50">End Session</BButton>
         </BCard>
-      </BCol> 
+      </BCol>
     </BRow>
   </div>
 </template>
 
 
 <style scoped>
-
 .main {
   overflow-x: hidden;
+  background-image: url('../assets/background.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100%;
+      margin: 0;
 }
 
 .overlay {
@@ -36,12 +36,9 @@
   margin-top: 10%;
 }
 
-.btn{
- border-radius: 20px;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
+.btn {
+  border-radius: 20px;
+  margin-top: 50px;
 }
 
 .quotes {
@@ -50,35 +47,37 @@
   font-size: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
-.card-quotes {
-  background-color: #292929; 
-  color: white; 
-  height: 70%; 
-  text-align: center; 
-  padding: 40px ;
-  width: 100%; 
-  max-width: 500px; 
+.card{
+  background-color: #292929;
+  color: white;
+  height: 100%;
+  text-align: center;
+  padding: 40px;
+  width: 900px;
+  border-radius: 15px;
 }
 
-#inputfield{
-  width: 100%; background-color: #333; 
-  margin-top: 20px; 
+#inputfield {
+  width: 100%;
+  background-color: #333;
+  margin-top: 20px;
   border: 1px solid #555;
   background-color: #fff;
 }
-.button{
-margin-top: 20px; 
-width: 100%; 
-margin-bottom:20px;
+
+.button {
+  margin-top: 20px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.goal-display{
+.goal-display {
   color: #ffffff;
   text-decoration: underline;
   font-size: 20px;
- text-align: center;
+  text-align: center;
 }
 </style>
