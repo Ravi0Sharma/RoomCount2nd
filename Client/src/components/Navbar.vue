@@ -42,7 +42,7 @@
       logout() {
         // Clear the localStorage on logout .
         localStorage.removeItem('username');
-        this.$router.push('/LogIn');
+        this.$router.push('/');
       }
     }
   }

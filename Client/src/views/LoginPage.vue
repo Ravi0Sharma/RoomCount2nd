@@ -22,7 +22,7 @@
   
               <p class="register mt-3">
                   If you don't have an account,
-                  <router-link to="/Register">Sign up here</router-link>
+                  <router-link to="/RegisterPage">Sign up here</router-link>
               </p>
           </BCard>
       </BContainer>
