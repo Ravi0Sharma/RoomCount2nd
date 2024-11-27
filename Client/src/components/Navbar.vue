@@ -5,16 +5,6 @@
       <BNavbarToggle target="nav-collapse"/>
       <BCollapse id="nav-collapse" is-nav>
   
-      <!-- Nav buttons -->
-      <BNavbarNav class="d-flex gap-2">
-        <BNavItem class="buttonsNav">
-          <router-link to="/HomePage">Home</router-link>
-        </BNavItem>
-        <BNavItem class="buttonsNav">
-          <router-link to="/Offices">Sessions</router-link>
-        </BNavItem>
-      </BNavbarNav>
-  
       <!-- Username-->
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
         <div class="d-none d-lg-flex align-items-center">
@@ -52,7 +42,7 @@
       logout() {
         // Clear the localStorage on logout .
         localStorage.removeItem('username');
-        this.$router.push('/LogIn');
+        this.$router.push('/');
       }
     }
   }
@@ -60,7 +50,7 @@
   
   <style scoped>
   .brand {
-    color: #E0E0E0 !important;
+    color: whitesmoke !important;
     font-size: 28px;
     margin-right: 5%;
     margin-left: 5%;
