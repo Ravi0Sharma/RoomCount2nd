@@ -8,7 +8,7 @@
               <h2>{{ Entries }}</h2>
               <p>Entries</p>
             </div>
-            <BButton class="btn btn-success w-50">Start Session</BButton>
+            <BButton class="btn btn-success w-50">Create Session</BButton>
             <BButton class="btn btn-danger w-50">End Session</BButton>
         </BCard>
       </BCol>
