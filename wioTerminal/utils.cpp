@@ -2,7 +2,7 @@
 #include "pin.h"
 
 int serial_Begin_Rate = 9600;
-
+int entries_count = 0; 
 Ultrasonic pinUltraSonic(ULTRASONIC_PIN); // Initialize with ULTRASONIC_PIN from pin.h
 
     void  entries (){
