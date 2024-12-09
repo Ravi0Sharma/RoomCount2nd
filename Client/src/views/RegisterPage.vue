@@ -54,7 +54,7 @@
             password: this.input.password
           };
   
-          const backendResponse = await fetch('/api/users', {
+          const backendResponse = await fetch('http://localhost:3000/api/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

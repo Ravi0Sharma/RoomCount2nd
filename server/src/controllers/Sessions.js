@@ -4,7 +4,7 @@ var router = express.Router();
 var Session = require('../models/Session.js');
 
 // POST a new session
-router.post('/api/session', async function (req, res, next) {
+router.post('/session', async function (req, res, next) {
     var session = new Session ({
         max_count: req.body.max_count,
         entries: req.body.entries,
@@ -28,7 +28,7 @@ router.post('/api/session', async function (req, res, next) {
 });
 
 //Get specific session
-router.get('/api/session/:sessionId', async function (req, res) {
+router.get('/session/:sessionId', async function (req, res) {
     try {
 
         const sessionId = req.params.sessionId;

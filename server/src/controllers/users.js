@@ -4,7 +4,7 @@ var router = express.Router();
 var User = require('../models/User.js');
 
 // POST a new user 
-router.post('/api/users', async function (req, res, next) {
+router.post('/users', async function (req, res, next) {
     var user = new User({
         username: req.body.username,
         password: req.body.password,
@@ -37,7 +37,7 @@ router.post('/api/users', async function (req, res, next) {
 
 
 //Get specific User
-router.get('/api/users/:username', async function (req, res) {
+router.get('/users/:username', async function (req, res) {
     try{
     var username = req.params.username;
     const user = await User.findOne({username : username});
