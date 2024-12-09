@@ -51,7 +51,7 @@
                   }).toString();
   
                   // Send GET request with the login data
-                  const response = await fetch(`/api/users?${queryParams}`, {
+                  const response = await fetch(`http://localhost:3000/api/users?${queryParams}`, {
                       method: 'GET',
                       headers: {
                           'Content-Type': 'application/json'

@@ -64,18 +64,26 @@
   
           if (backendResponse.ok) {
             const userData = await backendResponse.json();
-            this.toastMessage = "Registration successful! Redirecting to login page";
-            this.showToast = true;
+            console.log("Registration successful!", userData);
+            alert("Registration successful! Redirecting to the login page");
   
             setTimeout(() => {
-              this.$router.push('/LogIn');
-            }, 500);
+              this.$router.push("/");
+            }, 300);
           } else {
             const errorData = await backendResponse.json();
-            this.toastMessage = "Registration failed: " + (errorData.message || 'Unknown error');
-            this.showToast = true;
-            setTimeout(() => this.showToast = false, 3000);
+  
+            // Check if the error message contains 'username' or any other specific validation issue
+            if (errorData.message && errorData.message.includes('username')) {
+              alert(`Registration failed: ${errorData.message}`);
+            } else {
+              // Generic error handling
+              this.toastMessage = "Registration failed: " + (errorData.message || 'Unknown error');
+              this.showToast = true;
+              setTimeout(() => this.showToast = false, 3000);
+            }
           }
+  
         } catch (error) {
           console.error('Error registering user:', error);
           this.toastMessage = "An error occurred during registration. Please try again.";
