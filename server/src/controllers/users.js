@@ -40,7 +40,7 @@ router.post('/users', async function (req, res, next) {
 router.get('/users/:username', async function (req, res) {
     try{
     var username = req.params.username;
-    const user = await User.findOne({username : username});
+    const user = await User.findOne({username: username});
     if (!user){
         return res.status(404).json({"message": "No such user"});
     }

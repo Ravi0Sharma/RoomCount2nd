@@ -60,13 +60,7 @@
           });
   
           if (response.ok) {
-            const userData = await response.json();
-            console.log("Registration successful!", userData);
-            alert("Registration successful! Redirecting to the login page");
-  
-            setTimeout(() => {
-              this.$router.push("/");
-            }, 300);
+            this.$router.push("/");
           } else {
             const errorData = await response.json();
   
