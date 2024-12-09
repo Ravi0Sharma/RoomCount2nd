@@ -40,21 +40,18 @@
           email: "",
           username: "",
           password: ""
-        },
-        toastMessage: "",
-        showToast: false
+        }
       };
     },
     methods: {
       async register() {
         try {
           const newUser = {
-            email: this.input.email,
             username: this.input.username,
             password: this.input.password
           };
   
-          const backendResponse = await fetch('/api/users', {
+          const response = await fetch('http://localhost:3000/api/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -62,25 +59,24 @@
             body: JSON.stringify(newUser)
           });
   
-          if (backendResponse.ok) {
-            const userData = await backendResponse.json();
-            this.toastMessage = "Registration successful! Redirecting to login page";
-            this.showToast = true;
-  
-            setTimeout(() => {
-              this.$router.push('/LogIn');
-            }, 500);
+          if (response.ok) {
+            this.$router.push("/");
           } else {
-            const errorData = await backendResponse.json();
-            this.toastMessage = "Registration failed: " + (errorData.message || 'Unknown error');
-            this.showToast = true;
-            setTimeout(() => this.showToast = false, 3000);
+            const errorData = await response.json();
+  
+            // Check if the error message contains 'username' or any other specific validation issue
+            if (errorData.message && errorData.message.includes('username')) {
+              alert(`Registration failed: ${errorData.message}`);
+            } else {
+              // Generic error handling
+              alert("Registration failed: " + (errorData.message || 'Unknown error'));
+            }
           }
+  
         } catch (error) {
           console.error('Error registering user:', error);
-          this.toastMessage = "An error occurred during registration. Please try again.";
-          this.showToast = true;
-          setTimeout(() => this.showToast = false, 3000);
+          alert("An error occurred during registration. Please try again.");
+          
         }
       }
     }
