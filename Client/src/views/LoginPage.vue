@@ -37,15 +37,13 @@
               input: {
                   username: "",
                   password: ""
-              },
-              toastMessage: "",
-              showToast: false
+              }
           };
       },
       methods: {
           async login() {
               try {
-                  // Construct query parameters (username and password)
+                  // Construct username query parameter 
                   const queryParams = new URLSearchParams({
                       username: this.input.username,
                   }).toString();
