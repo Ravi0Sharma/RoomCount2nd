@@ -9,13 +9,12 @@ void setup() {
     tft.setRotation(3);
     
     Serial.begin(serial_Begin_Rate); // Start serial communication
-    WiFi_setup();
+    WiFi_setup();                         // Establishes a connection between the Wio Terminal and a WiFi network.
+    client.setServer(mqtt_server, 1883);  // Connect the MQTT Server
 
 }
 
 void loop() {
 
-
-  Screen_draw();
   Screen_result(entries_count);   
     }
