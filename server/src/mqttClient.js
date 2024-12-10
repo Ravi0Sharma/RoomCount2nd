@@ -24,11 +24,11 @@ client.on('connect', () => {
 // When a message is received
 client.on('message', (topic, message) => {
     console.log(`Received message on ${topic}: ${message.toString()}`);
-    // You can process the message here, such as parsing JSON or triggering actions
+    localStorage.setItem('entries', message.toString());
 });
 
-// Example to publish a message to a topic//ksk när max passed 
-client.publish('RoomCount/1/entry', 'Someone has entered the room!');
+// ksk när max har passat 
+client.publish('RoomCount/1/', ' room!');
 
 // Handle errors
 client.on('error', (err) => {

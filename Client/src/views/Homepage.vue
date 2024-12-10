@@ -15,6 +15,23 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      entries: localStorage.getItem('entries') || 0 
+    };
+  },
+  created() {
+    this.updateEntries();
+  },
+  methods: {
+    updateEntries() {
+      this.entries = localStorage.getItem('entries');
+    },
+  },
+};
+</script>
 
 <style scoped>
 .main {
