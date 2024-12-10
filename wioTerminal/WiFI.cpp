@@ -2,7 +2,7 @@
 #include "screen_draw.h"
 
 const char* ssid = "iPhone";
-const char* password =  "aquacare";
+const char* password =  "roomcount";
 
 
 void WiFi_setup() {

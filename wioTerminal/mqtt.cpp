@@ -19,7 +19,6 @@ const char* TOPIC_SUB_MAX = "RoomCount/1/max_amount";
 void MQTT_connect() {
 
 
-  tft.fillScreen(TFT_WHITE);
   Screen_logo();
   Screen_connectingMQTT();
   delay(2000);
@@ -41,8 +40,6 @@ void MQTT_connect() {
       //Loop attempts to connect to Wi-Fi, updating the display and serial output until successful.
        while (WiFi.status() != WL_CONNECTED){
        delay(500);
-       tft.fillScreen(TFT_WHITE);
-      delay(1000);
       WiFi_setup();
       }
       delay(3000);
@@ -50,10 +47,8 @@ void MQTT_connect() {
     }
   }
   // Display and serial output Connected.
-  tft.fillScreen(TFT_WHITE);
   Screen_connected();
-  delay(4000);
-  tft.fillScreen(TFT_WHITE);
+  delay(3000);
 }
 
 
