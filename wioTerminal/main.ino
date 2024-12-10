@@ -3,6 +3,8 @@
 #include "utils.h"
 #include "wifi.h"
 
+int previous_count = -1;
+
 void setup() {
 
     tft.begin();
@@ -16,5 +18,13 @@ void setup() {
 
 void loop() {
 
-  Screen_result(entries_count);   
+  client.loop();
+  entries (); 
+  
+  if (entries_count != previous_count) {
+    Screen_result(entries_count);
+    previous_count = entries_count;
+    client.publish(TOPIC_PUB_ENTRY, String(entries_count).c_str());
+    Serial.println("Sent Entry");
+  } 
     }
