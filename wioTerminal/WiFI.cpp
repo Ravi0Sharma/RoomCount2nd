@@ -1,5 +1,5 @@
-#include "WiFi.h"
-#include "Screen_draw.h"
+#include "wifi.h"
+#include "screen_draw.h"
 
 const char* ssid = "iPhone";
 const char* password =  "aquacare";
