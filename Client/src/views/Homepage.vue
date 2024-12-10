@@ -5,8 +5,7 @@
         <p style="color: whitesmoke; font-size: 34px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);">Session</p>
         <BCard class="card">
             <div class="stats">
-              <h2>{{ Entries }}</h2>
-              <p>Entries</p>
+              <p>Entries: <h2>{{ Entries }}</h2> </p> 
             </div>
             <BButton class="btn btn-success w-50">Create Session</BButton>
             <BButton class="btn btn-danger w-50">End Session</BButton>
