@@ -1,7 +1,7 @@
-#include"Screen_draw.h"
+#include"screen_draw.h"
 #include"pin.h"
 #include "utils.h"
-#include "WiFi.h"
+#include "wifi.h"
 
 void setup() {
 

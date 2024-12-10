@@ -30,5 +30,4 @@ void WiFi_setup() {
     
   delay(3000);
   tft.fillScreen(TFT_WHITE);
-  
     }
