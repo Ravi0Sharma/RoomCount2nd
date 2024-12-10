@@ -5,6 +5,7 @@ extern const char* mqtt_server; // MQTT server address
 
 extern void MQTT_connect(); 
 
+extern void callback(char* topic, byte* payload, unsigned int length); // Declaration of MQTT callback function
 
 // topics for sending sensor data
 extern const char* TOPIC_PUB_ENTRY; 
