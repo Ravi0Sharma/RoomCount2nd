@@ -18,6 +18,10 @@ void setup() {
 
 void loop() {
 
+  if (!client.connected()) {  // Connect to Mqtt if not connected
+    MQTT_connect();
+  }
+  
   client.loop();
   entries (); 
   
