@@ -6,6 +6,7 @@
 WiFiClient wioClient;
 PubSubClient client(wioClient);
 
+int max_amount = 0; 
 
 const char* mqtt_server = "broker.hivemq.com"; // MQTT server address
 
@@ -53,4 +54,28 @@ void MQTT_connect() {
   Screen_connected();
   delay(4000);
   tft.fillScreen(TFT_WHITE);
+}
+
+
+//Handles incoming MQTT messages
+void callback(char* topic, byte* payload, unsigned int length) {
+ 
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  char buff_p[length];
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+    buff_p[i] = (char)payload[i];
+  }
+
+ if (strcmp(topic, TOPIC_SUB_MAX) == 0) {
+    Serial.println("Max amount Set");
+
+  // Parse the max amount from the payload
+    int max_amount = atoi(buff_p); // Convert payload string to integer
+    Serial.print("Max Amount: ");
+    Serial.println(max_amount);
+}
+
 }
