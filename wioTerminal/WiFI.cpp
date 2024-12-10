@@ -13,7 +13,7 @@ void WiFi_setup() {
     Serial.println("Connecting to WiFi.."); 
    
     WiFi.begin(ssid, password); // Initiates connection to Wi-Fi network using provided SSID and password
-    tft.fillScreen(TFT_WHITE);
+    
     //Continuously attempts Wi-Fi connection, updating status on serial monitor and screen.
     while (WiFi.status() != WL_CONNECTED) {
         WiFi.begin(ssid, password);
@@ -24,10 +24,9 @@ void WiFi_setup() {
       
         Screen_connectingWiFi();
     }
-    tft.fillScreen(TFT_WHITE);
+  
     Serial.println("Connected to the WiFi network");
     Screen_connected();
     
   delay(3000);
-  tft.fillScreen(TFT_WHITE);
     }
