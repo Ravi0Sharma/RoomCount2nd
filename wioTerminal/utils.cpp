@@ -1,18 +1,26 @@
 #include "utils.h"
 #include "pin.h"
+#include "mqtt.h"
+#include "screen_draw.h"
 
-int serial_Begin_Rate = 9600;
-int entries_count = 0; 
-Ultrasonic pinUltraSonic(ULTRASONIC_PIN); // Initialize with ULTRASONIC_PIN from pin.h
+unsigned long lastMeasurementTime = 0;
+const unsigned long cooldownTime = 3000;  // Cooldown period in milliseconds (3 seconds)
+int entries_count = 0;
+int serial_Begin_Rate = 9600; 
 
-    void  entries (){
+Ultrasonic pinUltraSonic(ULTRASONIC_PIN);
 
-    long measurement = pinUltraSonic.MeasureInCentimeters(); 
+void entries() {
 
-    if (measurement < 15){
-    entries_count++; 
+  long measurement = pinUltraSonic.MeasureInCentimeters();
+
+  if (measurement< 15 && measurement > 1) {
+    unsigned long currentTime = millis();
+
+    if (currentTime - lastMeasurementTime >= cooldownTime) {
+      entries_count++;  // Increment the count (person entered)
+      Serial.println(measurement);
+      delay(1500);
     }
-   
-    delay(500);
+  }
 }
-
