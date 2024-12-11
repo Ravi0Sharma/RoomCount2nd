@@ -5,8 +5,8 @@
         <p style="color: whitesmoke; font-size: 34px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);">Session</p>
         <BCard class="card">
             <div class="stats">
-              <h2>{{ Entries }}</h2>
-              <p>Entries</p>
+              <p>Entries:</p>
+              <h2>{{ entries }}</h2>
             </div>
             <BButton class="btn btn-success w-50">Create Session</BButton>
             <BButton class="btn btn-danger w-50">End Session</BButton>
@@ -16,6 +16,33 @@
   </div>
 </template>
 
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      entries: 0, 
+    };
+  },
+  methods: {
+    async fetchCounter() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/entries');
+        this.entries = response.data.counter; 
+      } catch (err) {
+        console.log( 'Error fetching counter: ' + err.message);
+      }
+    },
+  },
+  mounted() {
+    this.fetchCounter();
+
+    // Set up polling to refresh every 2 seconds
+    setInterval(this.fetchCounter, 2000); 
+  },
+};
+</script>
 
 <style scoped>
 .main {

@@ -8,10 +8,11 @@
   },
   "dependencies": {
     "amqplib": "^0.10.5",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mongoose": "^8.8.2",
-    "mqtt": "^5.10.2"
+    "mqtt": "^5.10.3"
   }
 }
