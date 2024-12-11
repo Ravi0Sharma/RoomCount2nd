@@ -1,11 +1,17 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/RoomCount';
 var port = process.env.PORT || 3000;
 var app = express();
+
+// Middleware
+app.use(express.json()); // Parse JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded payloads
+app.use(cors()); // Enable CORS
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function (err) {
@@ -23,11 +29,10 @@ const mqttPort = 1883;
 // Connect to the MQTT broker
 const client = mqtt.connect(mqttServer, { port: mqttPort });
 
-// When connected
+
 client.on('connect', () => {
     console.log('Connected to MQTT Broker');
     
-    // Subscribe to a topic
     client.subscribe('RoomCount/1/entry', (err) => {
         if (!err) {
             console.log('Subscribed to RoomCount/1/entry');
@@ -37,10 +42,24 @@ client.on('connect', () => {
     });
 });
 
+
+// Import and use routes
+const topicController = require('./src/controllers/topic');
+app.use('/api', topicController); 
+
 // When a message is received
-client.on('message', (topic, message) => {
-    console.log(`Received message on ${topic}: ${message.toString()}`);
-    // lägg till function för hantera recived
+client.on('message', (topic) => {
+    console.log(`Received message on ${topic}`);
+    
+// Sending the POST request to increment the counter
+axios.post('http://localhost:3000/api/entries')
+.then(response => {
+  console.log('Counter incremented successfully:', response.data);
+})
+.catch(error => {
+  console.error('Error incrementing counter:', error);
+});
+
 });
 
 // ksk när max har passat 
@@ -51,11 +70,6 @@ client.on('error', (err) => {
     console.error('MQTT connection error: ' + err);
 });
 
-
-// Middleware
-app.use(express.json()); // Parse JSON payloads
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded payloads
-app.use(cors()); // Enable CORS
 
 // Import and use routes
 const usersController = require('./src/controllers/users');

@@ -17,23 +17,29 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      entries: localStorage.getItem('entries') || 0 
+      entries: 0, 
     };
   },
-  created() {
-    this.updateEntries();
-    this.interval = setInterval(this.updateEntries, 1000); 
-  },
-  beforeDestroy() {
-    clearInterval(this.interval); // Clear the interval when the component is destroyed
-  },
   methods: {
-    updateEntries() {
-      this.entries = localStorage.getItem('entries');
+    async fetchCounter() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/entries');
+        this.entries = response.data.counter; 
+      } catch (err) {
+        console.log( 'Error fetching counter: ' + err.message);
+      }
     },
+  },
+  mounted() {
+    this.fetchCounter();
+
+    // Set up polling to refresh every 2 seconds
+    setInterval(this.fetchCounter, 2000); 
   },
 };
 </script>
