@@ -17,3 +17,46 @@
       </BRow>
     </div>
   </template>
+
+
+<style scoped>
+.main {
+  overflow-x: hidden;
+  background-image: url('../assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  margin: 0;
+}
+
+.quotes {
+  margin-top: 2%;
+  color: #292929;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  background-color: #292929;
+  color: white;
+  height: 100%;
+  text-align: center;
+  padding: 40px;
+  width: 900px;
+  border-radius: 15px;
+}
+
+.history-list {
+  color: white;
+  font-size: 18px;
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+
+.history-list li {
+  margin: 10px 0;
+}
+</style>
