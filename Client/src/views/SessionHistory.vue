@@ -8,7 +8,7 @@
               <p style="font-size: 18px;">Previous Sessions:</p>
               <ul class="history-list">
                 <li v-for="(session, index) in sessionHistory" :key="index">
-                  <p>Session {{ index + 1 }}: {{ session.entries }} entries</p>
+                  <p>Session {{ index + 1 }}: {{ session.entries.length }} entries</p>
                 </li>
               </ul>
             </div>
@@ -18,6 +18,30 @@
     </div>
   </template>
 
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      sessionHistory: [] // Store fetched sessions here
+    };
+  },
+  created() {
+    this.fetchSessions();
+  },
+  methods: {
+    async fetchSessions() {
+      try {
+        const response = await axios.get('http://localhost:3000/api//sessions'); 
+        this.sessionHistory = response.data;
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    }
+  }
+};
+</script>
 
 <style scoped>
 .main {
