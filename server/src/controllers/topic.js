@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Initialize a counter
-let counter = 0;
+var counter = 0;
 
 // POST to increment the counter
 router.post('/entries', async function (req, res, next) {
@@ -11,7 +11,7 @@ router.post('/entries', async function (req, res, next) {
 
         res.status(200).json({
             message: 'Counter incremented successfully!',
-            counter: counter // Return the current value of the counter
+            counter: counter 
         });
 
     } catch (err) {
@@ -28,11 +28,11 @@ router.post('/entries', async function (req, res, next) {
 router.get('/entries', async function (req, res, next) {
     try {
         res.status(200).json({
-            counter: counter // Return the current counter value
+            counter: counter 
         });
     } catch (err) {
         console.error("Error occurred while retrieving counter:", err);
-
+        
         res.status(500).json({
           message: 'An error occurred while retrieving the counter.',
           error: err.message
@@ -40,5 +40,31 @@ router.get('/entries', async function (req, res, next) {
     }
 });
 
+
+// POST to set the counter to a specific value 
+router.post('/entries/set', async function (req, res, next) {
+    try {
+        const { value } = req.body; // Get the counter value from the request body
+        if (typeof value === 'number') {
+            counter = value; 
+            res.status(200).json({
+                message: 'Counter updated successfully!',
+                counter: counter // Return the updated counter value
+            });
+        } else {
+            res.status(400).json({
+                message: 'Invalid value. "value" must be a number.'
+            });
+        }
+    } catch (err) {
+        console.error("Error occurred while setting counter:", err);
+ 
+ 
+        res.status(500).json({
+            message: 'An error occurred while setting the counter.',
+            error: err.message
+        });
+    }
+ });
 
 module.exports = router;

@@ -6,43 +6,84 @@
         <BCard class="card">
             <div class="stats">
               <p>Entries:</p>
-              <h2>{{ entries }}</h2>
+              <h2>{{ session.entries }}</h2>
             </div>
-            <BButton class="btn btn-success w-50">Create Session</BButton>
-            <BButton class="btn btn-danger w-50">End Session</BButton>
+            <BButton class="btn btn-success w-50"@click="createSession">Create Session</BButton>
+            <BButton class="btn btn-danger w-50"@click="endSession">End Session</BButton>
         </BCard>
       </BCol>
     </BRow>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      entries: 0, 
-    };
-  },
-  methods: {
-    async fetchCounter() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/entries');
-        this.entries = response.data.counter; 
-      } catch (err) {
-        console.log( 'Error fetching counter: ' + err.message);
-      }
-    },
-  },
-  mounted() {
-    this.fetchCounter();
 
-    // Set up polling to refresh every 2 seconds
-    setInterval(this.fetchCounter, 2000); 
-  },
+export default {
+ data() {
+   return {
+     session: {
+       active: false,
+       entries: 0, 
+     },
+     fetchInterval: null,
+   };
+ },
+ methods: {
+   // Fetch the latest counter value and update the session
+   async fetchCounter() {
+     try {
+       const response = await axios.get('http://localhost:3000/api/entries');
+       if (response.data && typeof response.data.counter === 'number') {
+         this.session.entries = response.data.counter; // Update entries
+       } else {
+         console.error('Unexpected response:', response.data);
+       }
+     } catch (err) {
+       console.log('Error fetching counter: ' + err.message);
+     }
+   },
+
+
+   // Start a new session with entries initialized to 0
+   async createSession() {
+     if (!this.session.active) {
+       this.session.active = true;
+       this.session.entries = 0; 
+       console.log('Session started:', this.session);
+
+
+       // Set an interval to fetch data every 1 second
+       this.fetchInterval = setInterval(async () => {
+         await this.fetchCounter();
+       }, 1000);
+     }
+   },
+
+ endSession() {
+ if (this.session.active) {
+   console.log('Ending session', this.session);
+
+
+   axios.post('http://localhost:3000/api/entries/set', { value: 0 })
+     .then((response) => {
+       console.log(response.data.message); 
+       this.session.entries = 0; 
+       this.session.active = false; 
+       clearInterval(this.fetchInterval); 
+     })
+     .catch((err) => {
+       console.error('Error updating counter:', err.message);
+     });
+ }
+}
+
+ },
 };
 </script>
+
 
 <style scoped>
 .main {
