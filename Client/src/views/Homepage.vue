@@ -8,8 +8,8 @@
               <p>Entries:</p>
               <h2>{{ session.entries }}</h2>
             </div>
-            <BButton class="btn btn-success w-50">Create Session</BButton>
-            <BButton class="btn btn-danger w-50">End Session</BButton>
+            <BButton class="btn btn-success w-50"@click="createSession">Create Session</BButton>
+            <BButton class="btn btn-danger w-50"@click="endSession">End Session</BButton>
         </BCard>
       </BCol>
     </BRow>
@@ -42,15 +42,52 @@ export default {
       } catch (err) {
         console.log('Error fetching counter: ' + err.message);
       }
+
     },
+
+   // Start a new session with entries initialized to 0
+   async createSession() {
+     if (!this.session.active) {
+       this.session.active = true;
+       this.session.entries = 0; // Reset counter at the start of the session
+       console.log('Session started:', this.session);
+
+
+       // Set an interval to fetch data every 1 second
+       this.fetchInterval = setInterval(async () => {
+         await this.fetchCounter();
+       }, 1000);
+     }
+   },
+
+
+ endSession() {
+ if (this.session.active) {
+   console.log('Ending session', this.session);
+
+
+   axios.post('http://localhost:3000/api/entries/set', { value: 0 })
+     .then((response) => {
+       console.log(response.data.message); // Log success message from server
+       this.session.entries = 0; // Reset the local counter
+       this.session.active = false; // Mark session as inactive
+       clearInterval(this.fetchInterval); // Clear the interval
+     })
+     .catch((err) => {
+       console.error('Error updating counter:', err.message);
+     });
+
+    }
+  },
   mounted() {
     this.fetchCounter();
 
     // Set up polling to refresh every 2 seconds
     setInterval(this.fetchCounter, 2000); 
-  },
+  }
 }
-}
+  } 
+
 </script>
 
 <style scoped>
