@@ -6,7 +6,7 @@
         <BCard class="card">
             <div class="stats">
               <p>Entries:</p>
-              <h2>{{ entries }}</h2>
+              <h2>{{ session.entries }}</h2>
             </div>
             <BButton class="btn btn-success w-50">Create Session</BButton>
             <BButton class="btn btn-danger w-50">End Session</BButton>
@@ -22,26 +22,35 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      entries: 0, 
+      session: {
+        active: false,
+        entries: 0, // Start with 0
+      },
+      fetchInterval: null,
     };
   },
   methods: {
+    // Fetch the latest counter value and update the session
     async fetchCounter() {
       try {
         const response = await axios.get('http://localhost:3000/api/entries');
-        this.entries = response.data.counter; 
+        if (response.data && typeof response.data.counter === 'number') {
+          this.session.entries = response.data.counter; // Update entries
+        } else {
+          console.error('Unexpected response:', response.data);
+        }
       } catch (err) {
-        console.log( 'Error fetching counter: ' + err.message);
+        console.log('Error fetching counter: ' + err.message);
       }
     },
-  },
   mounted() {
     this.fetchCounter();
 
     // Set up polling to refresh every 2 seconds
     setInterval(this.fetchCounter, 2000); 
   },
-};
+}
+}
 </script>
 
 <style scoped>

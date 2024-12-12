@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Initialize a counter
-let counter = 0;
+var counter = 0;
 
 // POST to increment the counter
 router.post('/entries', async function (req, res, next) {
@@ -11,7 +11,7 @@ router.post('/entries', async function (req, res, next) {
 
         res.status(200).json({
             message: 'Counter incremented successfully!',
-            counter: counter // Return the current value of the counter
+            counter: counter 
         });
 
     } catch (err) {
@@ -28,11 +28,11 @@ router.post('/entries', async function (req, res, next) {
 router.get('/entries', async function (req, res, next) {
     try {
         res.status(200).json({
-            counter: counter // Return the current counter value
+            counter: counter 
         });
     } catch (err) {
         console.error("Error occurred while retrieving counter:", err);
-
+        
         res.status(500).json({
           message: 'An error occurred while retrieving the counter.',
           error: err.message
