@@ -16,40 +16,42 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      session: {
-        active: false,
-        entries: 0, // Start with 0
-      },
-      fetchInterval: null,
-    };
-  },
-  methods: {
-    // Fetch the latest counter value and update the session
-    async fetchCounter() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/entries');
-        if (response.data && typeof response.data.counter === 'number') {
-          this.session.entries = response.data.counter; // Update entries
-        } else {
-          console.error('Unexpected response:', response.data);
-        }
-      } catch (err) {
-        console.log('Error fetching counter: ' + err.message);
-      }
 
-    },
+export default {
+ data() {
+   return {
+     session: {
+       active: false,
+       entries: 0, 
+     },
+     fetchInterval: null,
+   };
+ },
+ methods: {
+   // Fetch the latest counter value and update the session
+   async fetchCounter() {
+     try {
+       const response = await axios.get('http://localhost:3000/api/entries');
+       if (response.data && typeof response.data.counter === 'number') {
+         this.session.entries = response.data.counter; // Update entries
+       } else {
+         console.error('Unexpected response:', response.data);
+       }
+     } catch (err) {
+       console.log('Error fetching counter: ' + err.message);
+     }
+   },
+
 
    // Start a new session with entries initialized to 0
    async createSession() {
      if (!this.session.active) {
        this.session.active = true;
-       this.session.entries = 0; // Reset counter at the start of the session
+       this.session.entries = 0; 
        console.log('Session started:', this.session);
 
 
@@ -60,7 +62,6 @@ export default {
      }
    },
 
-
  endSession() {
  if (this.session.active) {
    console.log('Ending session', this.session);
@@ -68,27 +69,21 @@ export default {
 
    axios.post('http://localhost:3000/api/entries/set', { value: 0 })
      .then((response) => {
-       console.log(response.data.message); // Log success message from server
-       this.session.entries = 0; // Reset the local counter
-       this.session.active = false; // Mark session as inactive
-       clearInterval(this.fetchInterval); // Clear the interval
+       console.log(response.data.message); 
+       this.session.entries = 0; 
+       this.session.active = false; 
+       clearInterval(this.fetchInterval); 
      })
      .catch((err) => {
        console.error('Error updating counter:', err.message);
      });
-
-    }
-  },
-  mounted() {
-    this.fetchCounter();
-
-    // Set up polling to refresh every 2 seconds
-    setInterval(this.fetchCounter, 2000); 
-  }
+ }
 }
-  } 
 
+ },
+};
 </script>
+
 
 <style scoped>
 .main {
