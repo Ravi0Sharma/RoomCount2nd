@@ -27,22 +27,20 @@ router.post('/session', async function (req, res, next) {
     }
 });
 
-//Get specific session
-router.get('/session/:sessionId', async function (req, res) {
+// Get all sessions
+router.get('/sessions', async function (req, res) {
     try {
+        const sessions = await Session.find(); // Fetch all sessions
 
-        const sessionId = req.params.sessionId;
-
-        const session = await Session.findById(sessionId);
-
-        if (!session) {
-            return res.status(404).json({ "message": "No such session" });
+        if (!sessions || sessions.length === 0) {
+            return res.status(404).json({ "message": "No sessions found" });
         }
-        res.json(session);
+
+        res.json(sessions);
     } catch (err) {
-        console.error("Error occurred while fetching session:", err);
+        console.error("Error occurred while fetching sessions:", err);
         res.status(500).json({
-            message: "Server error while fetching session",
+            message: "Server error while fetching sessions",
             error: err.message
         });
     }
