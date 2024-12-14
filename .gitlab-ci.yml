@@ -1,8 +1,22 @@
-image: node:22-alpine  # Use Alpine-based image with Node.js 22
+image: node:22-alpine  # Alpine-based image with Node.js 22
 
-# before_script:
-# - chmod +x setup-build-env.sh   
-# - ./setup-build-env.sh    
+before_script:
+  # Install curl in the Alpine-based Docker image
+  - apk add --no-cache curl
+
+  # Install Arduino CLI
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+
+  # Set the correct PATH to include the directory where arduino-cli is installed
+  - export PATH=$PATH:/builds/ravisha/RoomCount2nd/bin
+
+  # Verify that Arduino CLI is installed and check the version
+  - arduino-cli version
+
+  # Install Seeed Wio Terminal core and libraries
+  - arduino-cli core update-index
+  - arduino-cli lib install "PubSubClient@2.8"
+  - arduino-cli lib install "Seeed Arduino rpcWiFi@1.0.7"
 
 stages:
   - install
@@ -10,7 +24,6 @@ stages:
   - deploy
 
 variables:
-  # Use Node.js version you prefer (make sure to use the right version)
   NODE_VERSION: "22"  
 
 install_dependencies:
@@ -36,8 +49,12 @@ deploy:
   tags:
     - docker
   script:
-   - cd Client
-   - npm install
+    - cd Client
+    - npm install --production    # Install only production dependencies
+    
+    - nohup npm run start &     
+    
+    - sleep 10    
  
      
 
