@@ -1,7 +1,10 @@
 image: node:22-alpine  # Use Alpine-based image with Node.js 22
 
 before_script:
-  # Install Arduino CLI and dependencies in one go
+  # Install curl in the alpine-based Docker image
+  - apk add --no-cache curl
+
+  # Install Arduino CLI and dependencies
   - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
   - export PATH=$PATH:$HOME/bin
 
