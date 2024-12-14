@@ -1,8 +1,15 @@
 image: node:22-alpine  # Use Alpine-based image with Node.js 22
 
 before_script:
- - chmod +x setup-build-env.sh   
- - ./setup-build-env.sh    
+  # Install Arduino CLI and dependencies in one go
+  - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+  - export PATH=$PATH:$HOME/bin
+
+  # Install Seeed Wio Terminal core and libraries
+  - arduino-cli core update-index
+  - arduino-cli core install Seeeduino:samd
+  - arduino-cli lib install "PubSubClient@2.8"
+  - arduino-cli lib install "Seeed Arduino rpcWiFi@1.0.7"
 
 stages:
   - install
