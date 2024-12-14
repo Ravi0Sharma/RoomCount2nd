@@ -48,12 +48,13 @@ deploy:
   stage: deploy
   tags:
     - docker
-  script:
+   script:
     - cd Client
-    - npm install
+    - npm install --production   
     
-    - npm run dev 
- 
-     
 
+   
+    - nohup npm run start &      commands)
+    
+    - sleep 10    
 
