@@ -1,6 +1,6 @@
 image: node:22-alpine  # Use Alpine-based image with Node.js 22
 
-# before_script:
+ before_script:
  - chmod +x setup-build-env.sh   
  - ./setup-build-env.sh    
 
@@ -10,7 +10,6 @@ stages:
   - deploy
 
 variables:
-  # Use Node.js version you prefer (make sure to use the right version)
   NODE_VERSION: "22"  
 
 install_dependencies:
