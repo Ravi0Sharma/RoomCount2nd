@@ -38,7 +38,9 @@ void loop() {
   if(entries_count > max_amount ){
         analogWrite(WIO_BUZZER, 128);
         delay(5000);
+        
         // add logic to notify user 
+       client.publish(TOPIC_PUB_SURPASS, String("1").c_str());
         analogWrite(WIO_BUZZER, 0);
         delay(1000);
     }
