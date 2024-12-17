@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-// Initialize a counter
-var counter = 0;
+// Initialize a entries 
+var entries = 0;
 
-// POST to increment the counter
+// POST to increment the entries
 router.post('/entries', async function (req, res, next) {
     try {
-        counter++;
+        entriesr++;
 
         res.status(200).json({
             message: 'Counter incremented successfully!',
-            counter: counter 
+            entries: entries 
         });
 
     } catch (err) {
