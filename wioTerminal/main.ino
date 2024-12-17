@@ -9,7 +9,8 @@ void setup() {
 
     tft.begin();
     tft.setRotation(3);
-    
+    pinMode(BUZZER_PIN, OUTPUT); set buzzer pin to output 
+
     Serial.begin(serial_Begin_Rate); // Start serial communication
     client.setCallback(callback);
     
