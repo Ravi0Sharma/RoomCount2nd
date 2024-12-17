@@ -14,7 +14,7 @@
           <div class="MaxSet d-flex justify-content-center">
             <BFormInput id="MaxSet" v-model="input.username" type="text" placeholder="Enter Maximum Entry Limit"
               required class="custom-input"></BFormInput>
-              <BButton class="btn btn-danger w-25" @click="MaxSet">Set Max</BButton>
+              <BButton class="btn btn-danger w-25" @click="maxSet">Set Max</BButton>
           </div>
         </BCard>
       </BCol>
@@ -74,7 +74,7 @@ export default {
         console.log('Ending session', this.session);
 
 
-        axios.post('http://localhost:3000/api/entries/set', { value: 0 })
+        axios.post('http://localhost:3000/api/entries', { value: 0 })
           .then((response) => {
             console.log(response.data.message);
             this.session.entries = 0;
@@ -87,8 +87,9 @@ export default {
       }
     },
 
-    MaxSet(){
-    axios.post ()
+    maxSet(){
+    axios.post ('http://localhost:3000/api/entries/maxset')
+
     }
 
   },

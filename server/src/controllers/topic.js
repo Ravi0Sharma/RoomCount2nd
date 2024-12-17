@@ -40,16 +40,15 @@ router.get('/entries', async function (req, res, next) {
     }
 });
 
-
-// POST to set the counter to a specific value 
-router.post('/entries/set', async function (req, res, next) {
+// POST maxSet
+router.post('/entries/maxset', async function (req, res, next) {
     try {
-        const { value } = req.body; // Get the counter value from the request body
+        const { value } = req.body; 
         if (typeof value === 'number') {
-            counter = value; 
+            maxSet = value; 
             res.status(200).json({
-                message: 'Counter updated successfully!',
-                counter: counter // Return the updated counter value
+                message: 'maxSet updated successfully!',
+                maxSet : maxSet
             });
         } else {
             res.status(400).json({
