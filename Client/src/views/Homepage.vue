@@ -4,12 +4,18 @@
       <BCol class="quotes text-center">
         <p style="color: whitesmoke; font-size: 34px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);">Session</p>
         <BCard class="card">
-            <div class="stats">
-              <p>Entries:</p>
-              <h2>{{ session.entries }}</h2>
-            </div>
-            <BButton class="btn btn-success w-50"@click="createSession">Create Session</BButton>
-            <BButton class="btn btn-danger w-50"@click="endSession">End Session</BButton>
+          <div class="stats">
+            <p>Entries:</p>
+            <h2>{{ session.entries }}</h2>
+          </div>
+          <BButton class="btn btn-success w-50" @click="createSession">Create Session</BButton>
+          <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
+
+          <div class="MaxSet d-flex justify-content-center">
+            <BFormInput id="MaxSet" v-model="input.username" type="text" placeholder="Enter Maximum Entry Limit"
+              required class="custom-input"></BFormInput>
+              <BButton class="btn btn-danger w-25" @click="MaxSet">Set Max</BButton>
+          </div>
         </BCard>
       </BCol>
     </BRow>
@@ -22,65 +28,70 @@ import axios from 'axios';
 
 
 export default {
- data() {
-   return {
-     session: {
-       active: false,
-       entries: 0, 
-     },
-     fetchInterval: null,
-   };
- },
- methods: {
-   // Fetch the latest counter value and update the session
-   async fetchCounter() {
-     try {
-       const response = await axios.get('http://localhost:3000/api/entries');
-       if (response.data && typeof response.data.counter === 'number') {
-         this.session.entries = response.data.counter; // Update entries
-       } else {
-         console.error('Unexpected response:', response.data);
-       }
-     } catch (err) {
-       console.log('Error fetching counter: ' + err.message);
-     }
-   },
+  data() {
+    return {
+      session: {
+        active: false,
+        entries: 0,
+      },
+      fetchInterval: null,
+      MaxSet
+    };
+  },
+  methods: {
+    // Fetch the latest counter value and update the session
+    async fetchCounter() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/entries');
+        if (response.data && typeof response.data.counter === 'number') {
+          this.session.entries = response.data.counter; // Update entries
+        } else {
+          console.error('Unexpected response:', response.data);
+        }
+      } catch (err) {
+        console.log('Error fetching counter: ' + err.message);
+      }
+    },
 
 
-   // Start a new session with entries initialized to 0
-   async createSession() {
-     if (!this.session.active) {
-       this.session.active = true;
-       this.session.entries = 0; 
-       console.log('Session started:', this.session);
+    // Start a new session with entries initialized to 0
+    async createSession() {
+      if (!this.session.active) {
+        this.session.active = true;
+        this.session.entries = 0;
+        console.log('Session started:', this.session);
 
 
-       // Set an interval to fetch data every 1 second
-       this.fetchInterval = setInterval(async () => {
-         await this.fetchCounter();
-       }, 1000);
-     }
-   },
+        // Set an interval to fetch data every 1 second
+        this.fetchInterval = setInterval(async () => {
+          await this.fetchCounter();
+        }, 1000);
+      }
+    },
 
- endSession() {
- if (this.session.active) {
-   console.log('Ending session', this.session);
+    endSession() {
+      if (this.session.active) {
+        console.log('Ending session', this.session);
 
 
-   axios.post('http://localhost:3000/api/entries/set', { value: 0 })
-     .then((response) => {
-       console.log(response.data.message); 
-       this.session.entries = 0; 
-       this.session.active = false; 
-       clearInterval(this.fetchInterval); 
-     })
-     .catch((err) => {
-       console.error('Error updating counter:', err.message);
-     });
- }
-}
+        axios.post('http://localhost:3000/api/entries/set', { value: 0 })
+          .then((response) => {
+            console.log(response.data.message);
+            this.session.entries = 0;
+            this.session.active = false;
+            clearInterval(this.fetchInterval);
+          })
+          .catch((err) => {
+            console.error('Error updating counter:', err.message);
+          });
+      }
+    },
 
- },
+    MaxSet(){
+    axios.post ()
+    }
+
+  },
 };
 </script>
 
@@ -89,10 +100,10 @@ export default {
 .main {
   overflow-x: hidden;
   background-image: url('../assets/background.jpg');
-      background-size: cover;
-      background-position: center;
-      height: 100%;
-      margin: 0;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  margin: 0;
 }
 
 .overlay {
@@ -118,7 +129,7 @@ export default {
   align-items: center;
 }
 
-.card{
+.card {
   background-color: #292929;
   color: white;
   height: 100%;
