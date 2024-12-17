@@ -35,7 +35,7 @@ export default {
         entries: 0,
       },
       fetchInterval: null,
-      MaxSet
+      maxEntryLimit: 0
     };
   },
   methods: {
@@ -74,7 +74,7 @@ export default {
         console.log('Ending session', this.session);
 
 
-        axios.post('http://localhost:3000/api/entries', { value: 0 })
+        axios.post('http://localhost:3000/api/session', { value: 0 })
           .then((response) => {
             console.log(response.data.message);
             this.session.entries = 0;
@@ -87,9 +87,18 @@ export default {
       }
     },
 
-    maxSet(){
-    axios.post ('http://localhost:3000/api/entries/maxset')
+    async maxSet() {
+      try {
+        const response = await axios.post('http://localhost:3000/api/entries/maxset', {
+          maxLimit: this.maxEntryLimit
+        });
 
+        console.log(response.data);
+        alert("Maximum entry limit set successfully!");
+      } catch (error) {
+        console.error("Error setting maximum entry limit:", error);
+        alert("Failed to set maximum entry limit.");
+      }
     }
 
   },
