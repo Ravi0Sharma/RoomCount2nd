@@ -12,9 +12,9 @@
           <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
 
           <div class="MaxSet d-flex justify-content-center">
-            <BFormInput id="MaxSet" v-model="input.username" type="text" placeholder="Enter Maximum Entry Limit"
-              required class="custom-input"></BFormInput>
-              <BButton class="btn btn-danger w-25" @click="maxSet">Set Max</BButton>
+            <BFormInput id="maxSet" v-model="maxEntryLimit" type="text" placeholder="Enter Maximum Entry Limit"
+              required class="maxSet_input"></BFormInput>
+              <BButton class="maxbtn btn-danger w-25" @click="maxSet">Set Max</BButton>
           </div>
         </BCard>
       </BCol>
@@ -149,14 +149,6 @@ export default {
   border-radius: 15px;
 }
 
-#inputfield {
-  width: 100%;
-  background-color: #333;
-  margin-top: 20px;
-  border: 1px solid #555;
-  background-color: #fff;
-}
-
 .button {
   margin-top: 20px;
   width: 100%;
@@ -168,5 +160,19 @@ export default {
   text-decoration: underline;
   font-size: 20px;
   text-align: center;
+}
+
+.maxSet_input {
+  width: 100%;
+  background-color: #333;
+  margin-top: 50px;
+  border: 1px solid #555;
+  background-color: #fff;
+  height: 40px;
+}
+
+.maxbtn{
+border-radius: 10px;
+margin-left: 10px;
 }
 </style>
