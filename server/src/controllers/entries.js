@@ -40,30 +40,34 @@ router.get('/entries', async function (req, res, next) {
     }
 });
 
-// POST maxSet
-router.post('/entries/maxset', async function (req, res, next) {
+router.post('/entries/maxset', async function (req, res) {
     try {
         const { value } = req.body; 
+
+        // Check if value is a number
         if (typeof value === 'number') {
-            maxSet = value; 
+            const topic = 'RoomCount/1/SUB_MAX';
+            const payload = value.toString(); 
+
+            // Call the method from mqttClient.js to publish the payload
+            publishToTopic(topic, payload);
+
             res.status(200).json({
-                message: 'maxSet updated successfully!',
-                maxSet : maxSet
+                message: 'maxSet updated and published successfully!',
+                maxSet: value,
             });
         } else {
             res.status(400).json({
-                message: 'Invalid value. "value" must be a number.'
+                message: 'Invalid value. "value" must be a number.',
             });
         }
     } catch (err) {
-        console.error("Error occurred while setting counter:", err);
- 
- 
+        console.error('Error occurred while processing the request:', err);
         res.status(500).json({
-            message: 'An error occurred while setting the counter.',
-            error: err.message
+            message: 'An error occurred while processing the request.',
+            error: err.message,
         });
     }
- });
+});
 
 module.exports = router;
