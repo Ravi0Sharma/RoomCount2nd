@@ -71,7 +71,7 @@ export default {
     },
 
     historyPage(){
-    this.$router.push('/homepage');
+    this.$router.push('/SessionHistory');
     },
   
 
