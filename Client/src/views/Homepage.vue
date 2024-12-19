@@ -17,6 +17,7 @@
               <BButton class="maxbtn btn-danger w-25" @click="maxSet">Set Max</BButton>
           </div>
         </BCard>
+        <BButton class="btn btn-warning w-50" @click="historyPage">History Page</BButton>
       </BCol>
     </BRow>
   </div>
@@ -68,6 +69,11 @@ export default {
         }, 1000);
       }
     },
+
+    historyPage(){
+    this.$router.push('/homepage');
+    },
+  
 
     endSession() {
       if (this.session.active) {
