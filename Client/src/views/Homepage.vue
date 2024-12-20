@@ -12,9 +12,9 @@
           <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
 
           <div class="MaxSet d-flex justify-content-center">
-            <BFormInput id="maxSet" v-model="maxEntryLimit" type="text" placeholder="Enter Maximum Entry Limit"
-              required class="maxSet_input"></BFormInput>
-              <BButton class="maxbtn btn-danger w-25" @click="maxSet">Set Max</BButton>
+            <BFormInput id="maxSet" v-model="maxEntryLimit" type="text" placeholder="Enter Maximum Entry Limit" required
+              class="maxSet_input"></BFormInput>
+            <BButton class="maxbtn btn-danger w-25" @click="maxSet">Set Max</BButton>
           </div>
         </BCard>
         <BButton class="btn btn-warning w-50" @click="historyPage">History Page</BButton>
@@ -70,10 +70,10 @@ export default {
       }
     },
 
-    historyPage(){
-    this.$router.push('/SessionHistory');
+    historyPage() {
+      this.$router.push('/SessionHistory');
     },
-  
+
 
     endSession() {
       if (this.session.active) {
@@ -94,18 +94,20 @@ export default {
     },
 
     async maxSet() {
-      try {
-        const response = await axios.post('http://localhost:3000/api/entries/maxset', {
-          maxLimit: this.maxEntryLimit
-        });
-
-        console.log(response.data);
-        alert("Maximum entry limit set successfully!");
-      } catch (error) {
-        console.error("Error setting maximum entry limit:", error);
-        alert("Failed to set maximum entry limit.");
-      }
+  try {
+    // Validate input
+    if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
+      console.error("Please enter a valid positive number for the maximum entry limit.");
     }
+    const response = await axios.post('http://localhost:3000/api/entries/maxset', {
+      value: Number(this.maxEntryLimit)
+    });
+
+    console.error("Maximum entry limit set successfully!",response.data);
+  } catch (error) {
+    console.error("Failed to set maximum entry limit.");
+  }
+}
 
   },
 };
@@ -177,8 +179,8 @@ export default {
   height: 40px;
 }
 
-.maxbtn{
-border-radius: 10px;
-margin-left: 10px;
+.maxbtn {
+  border-radius: 10px;
+  margin-left: 10px;
 }
 </style>

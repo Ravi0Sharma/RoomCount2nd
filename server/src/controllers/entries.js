@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const { publishToTopic } = require('../../app');
 
 // Initialize a entries 
 var entries = 0;
@@ -42,15 +43,14 @@ router.get('/entries', async function (req, res, next) {
 
 router.post('/entries/maxset', async function (req, res) {
     try {
-        const { value } = req.body; 
+        const { value } = req.body;
 
-        // Check if value is a number
         if (typeof value === 'number') {
             const topic = 'RoomCount/1/SUB_MAX';
-            const payload = value.toString(); 
+            const payload = value.toString();
 
-            // Call the method from mqttClient.js to publish the payload
-            publishToTopic(topic, payload);
+            // Publish the payload to MQTT
+           // publishToTopic(topic, payload);
 
             res.status(200).json({
                 message: 'maxSet updated and published successfully!',
@@ -62,7 +62,7 @@ router.post('/entries/maxset', async function (req, res) {
             });
         }
     } catch (err) {
-        console.error('Error occurred while processing the request:', err);
+        console.error('Error occurred while setting maxSet:', err);
         res.status(500).json({
             message: 'An error occurred while processing the request.',
             error: err.message,

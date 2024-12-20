@@ -62,15 +62,6 @@ axios.post('http://localhost:3000/api/entries')
 
 });
 
-function publishToTopic(topic, payload) {
-    client.publish(topic, payload, function (err) {
-        if (err) {
-            console.error(`Failed to publish to topic ${topic}:`, err);
-        } else {
-            console.log(`Published ${payload} to topic ${topic}`);
-        }
-    });
-}
 
 // Handle errors
 client.on('error', (err) => {
@@ -92,4 +83,4 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-module.exports = app;
+module.exports = { app, publishToTopic };
