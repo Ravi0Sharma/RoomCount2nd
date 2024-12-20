@@ -102,8 +102,7 @@ export default {
     const response = await axios.post('http://localhost:3000/api/entries/maxset', {
       value: Number(this.maxEntryLimit)
     });
-
-    console.error("Maximum entry limit set successfully!",response.data);
+    alert("Maximum entry limit set successfully!",response.data);
   } catch (error) {
     console.error("Failed to set maximum entry limit.");
   }
