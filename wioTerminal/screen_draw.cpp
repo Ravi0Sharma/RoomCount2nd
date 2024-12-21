@@ -27,6 +27,15 @@ tft.setCursor((320 - tft.textWidth("Connected!")) / 2, 115);
 tft.print("Connected!");
 }
 
+
+void Screen_exceed(){
+tft.fillScreen(TFT_RED);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(3);
+tft.setCursor((320 - tft.textWidth("ENTRIES Exceeded!")) / 2, 115);
+tft.print("ENTRIES Exceeded");
+}
+
 void Screen_logo(){
 tft.fillScreen(TFT_BLACK);
 tft.fillRect(0,65,320,120,TFT_BLACK);  //Fills a blue rectangle at the top of the Wio Terminal screen.
