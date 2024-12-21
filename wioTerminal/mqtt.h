@@ -13,3 +13,4 @@ extern const char* TOPIC_SUB_MAX;
 extern const char* TOPIC_PUB_SURPASS;
 
 
+extern volatile int max_amount;
