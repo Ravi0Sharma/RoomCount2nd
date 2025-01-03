@@ -77,38 +77,6 @@ function publishToTopic(topic, payload) {
     });
 }
 
-/*
-// Define the /entries/maxset route directly in app.js
-app.post('/api/entries/maxset', async (req, res) => {
-    try {
-        const { value } = req.body;
-
-        if (typeof value === 'number') {
-            const topic = 'RoomCount/1/SUB_MAX';
-            const payload = value.toString();
-
-            // Publish the payload to MQTT
-            publishToTopic(topic, payload);
-
-            res.status(200).json({
-                message: 'maxSet updated and published successfully!',
-                maxSet: value,
-            });
-        } else {
-            res.status(400).json({
-                message: 'Invalid value. "value" must be a number.',
-            });
-        }
-    } catch (err) {
-        console.error('Error occurred while setting maxSet:', err);
-        res.status(500).json({
-            message: 'An error occurred while processing the request.',
-            error: err.message,
-        });
-    }
-});
-*/
-
 // Handle errors
 client.on('error', (err) => {
     console.error('MQTT connection error: ' + err);
