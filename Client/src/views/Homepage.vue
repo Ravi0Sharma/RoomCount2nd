@@ -25,7 +25,6 @@
 
 
 <script>
-import axios from 'axios';
 export default {
   data() {
     return {
@@ -75,50 +74,56 @@ export default {
       this.$router.push('/SessionHistory');
     },
 
-    async endSession() {
+    endSession() {
       if (this.session.active) {
         console.log('Ending session', this.session);
 
+        // Reset session and counter data
+        this.session.entries = 0;
+        this.counter = 0; 
+        this.session.active = false;
 
-        axios.post('http://localhost:3000/api/session', {entries: this.entries, max_count: this.maxEntryLimit })
-          .then((response) => {
-            console.log(response.data.message);
-            this.session.entries = 0;
-            this.maxEntryLimit = 0; 
-            this.session.active = false;
-            clearInterval(this.fetchInterval);
-          })
-          .catch((err) => {
-            console.error('Error updating counter:', err.message);
-          });
-      }
-      else{
-      console.log("Not active")
+        console.log('Session ended.');
       }
     },
 
-  async maxSet() {
-  try {
-    // Validate input
-    if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
-      console.error("Please enter a valid positive number for the maximum entry limit.");
-    }                                                     
-    const response = await axios.post('http://localhost:3000/api/entries/maxset', {
-      value: Number(this.maxEntryLimit)
-    });
-    alert("Maximum entry limit set successfully!");
-    console.log("Maximum entry limit set successfully!",response.data);
-  } catch (error) {
-    console.error("Failed to set maximum entry limit.");
-  }
-},
+    maxSet() {
+      if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
+        console.error('Please enter a valid positive number for the maximum entry limit.');
+        return;
+      }
+
+      const topic = 'RoomCount/1/maxset';
+      const payload = JSON.stringify({ maxLimit: this.maxEntryLimit });
+
+      // Publish the max limit via a POST request to your server
+      fetch('/api/maxset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload,
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error('Failed to set max entry limit');
+          return response.json();
+        })
+        .then((data) => {
+          console.log('Max entry limit set successfully!', data);
+          alert('Max entry limit set successfully!');
+        })
+        .catch((error) => {
+          console.error('Error setting max entry limit:', error);
+          alert('Error setting max entry limit.');
+        });
+    },
+  },
   onUnmounted() {
     if (this.sseSource) {
       this.sseSource.close(); // Clean up SSE connection on component destruction
       console.log('SSE connection closed.');
     }
   },
-  }
 };
 </script>
 

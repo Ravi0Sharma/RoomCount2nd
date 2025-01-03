@@ -13,7 +13,6 @@ app.use(express.json()); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded payloads
 app.use(cors()); // Enable CORS
 
-
 // Import and use routes
 const usersController = require('./src/controllers/users');
 app.use('/api', usersController); 
@@ -40,52 +39,25 @@ const mqttPort = 1883;
 // Connect to the MQTT broker
 const client = mqtt.connect(mqttServer, { port: mqttPort });
 
-
-client.on('connect', () => {
-    console.log('Connected to MQTT Broker');
+// When a message is received
+client.on('message', (topic) => {
+    console.log(`Received message on ${topic}`);
     
-    client.subscribe('RoomCount/1/entry', (err) => {
-        if (!err) {
-            console.log('Subscribed to RoomCount/1/entry');
-        } else {
-            console.log('Failed to subscribe: ' + err);
-        }
-    });
+// Sending the POST request to increment the counter
+axios.post('http://localhost:3000/api/entries')
+.then(response => {
+  console.log('Counter incremented successfully:', response.data);
+})
+.catch(error => {
+  console.error('Error incrementing counter:', error);
 });
 
-app.get('/events', (req, res) => {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-
-    // Add client to SSE clients list
-    sseClients.push(res);
-
-    // Send an initial message (optional)
-    res.write('data: {"message": "Connected to server"}\n\n');
-
-    // Clean up when the client disconnects
-    req.on('close', () => {
-        sseClients = sseClients.filter((client) => client !== res);
-    });
 });
-
-// Broadcasting MQTT messages to SSE clients
-client.on('message', (topic, message) => {
-    const payload = { topic, message: message.toString() };
-    console.log(`Broadcasting: ${JSON.stringify(payload)}`);
-    sseClients.forEach((res) => {
-        res.write(`data: ${JSON.stringify(payload)}\n\n`);
-    });
-});
-
-
 
 // Handle errors
 client.on('error', (err) => {
     console.error('MQTT connection error: ' + err);
 });
-
 
 // 404 Handler
 app.use('*', (req, res) => {
