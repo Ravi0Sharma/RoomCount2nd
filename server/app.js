@@ -39,6 +39,18 @@ const mqttPort = 1883;
 // Connect to the MQTT broker
 const client = mqtt.connect(mqttServer, { port: mqttPort });
 
+client.on('connect', () => {
+    console.log('Connected to MQTT Broker');
+    
+    client.subscribe('RoomCount/1/entry', (err) => {
+        if (!err) {
+            console.log('Subscribed to RoomCount/1/entry');
+        } else {
+            console.log('Failed to subscribe: ' + err);
+        }
+    });
+});
+
 // When a message is received
 client.on('message', (topic) => {
     console.log(`Received message on ${topic}`);
