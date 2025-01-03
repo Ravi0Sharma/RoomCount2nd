@@ -49,9 +49,6 @@ router.post('/entries/maxset', async (req, res) => {
             const topic = 'RoomCount/1/SUB_MAX';
             const payload = value.toString();
 
-            // Publish the payload to MQTT
-            publishToTopic(topic, payload);
-
             res.status(200).json({
                 message: 'maxSet updated and published successfully!',
                 maxSet: value,

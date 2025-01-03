@@ -99,7 +99,9 @@ export default {
     if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
       console.error("Please enter a valid positive number for the maximum entry limit.");
     }                                                     
-    const response = await axios.post('http://localhost:3000/api/entries/maxset', {value: (this.maxEntryLimit)});
+    const response = await axios.post('http://localhost:3000/api/entries/maxset', {
+      value: Number(this.maxEntryLimit)
+    });
     alert("Maximum entry limit set successfully!");
     console.log("Maximum entry limit set successfully!",response.data);
   } catch (error) {
