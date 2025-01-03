@@ -75,21 +75,25 @@ export default {
       this.$router.push('/SessionHistory');
     },
 
-    endSession() {
+    async endSession() {
       if (this.session.active) {
         console.log('Ending session', this.session);
 
 
-        axios.post('http://localhost:3000/api/session', { value: 0 })
+        axios.post('http://localhost:3000/api/session', {entries: this.entries, max_count: this.maxEntryLimit })
           .then((response) => {
             console.log(response.data.message);
             this.session.entries = 0;
+            this.maxEntryLimit = 0; 
             this.session.active = false;
             clearInterval(this.fetchInterval);
           })
           .catch((err) => {
             console.error('Error updating counter:', err.message);
           });
+      }
+      else{
+      console.log("Not active")
       }
     },
 
