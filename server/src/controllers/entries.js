@@ -8,7 +8,7 @@ var entries = 0;
 // POST to increment the entries
 router.post('/entries', async function (req, res, next) {
     try {
-        entriesr++;
+        entries++;
 
         res.status(200).json({
             message: 'Counter incremented successfully!',
