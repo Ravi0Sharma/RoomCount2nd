@@ -26,8 +26,6 @@
 
 <script>
 import axios from 'axios';
-
-
 export default {
   data() {
     return {
@@ -35,45 +33,47 @@ export default {
         active: false,
         entries: 0,
       },
-      fetchInterval: null,
-      maxEntryLimit: 0
+      counter: 0, // Counter variable for session entries 
+      maxEntryLimit: 0,
+      sseSource: null, // SSE EventSource
+    };
+  },
+  created() {
+    // Connect to the SSE endpoint
+    this.sseSource = new EventSource('/events');
+
+    // Listen for incoming messages
+    this.sseSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('Received SSE message:', data);
+
+      // Handle RoomCount entry topic
+      if (data.topic === 'RoomCount/1/entry') {
+        if (this.session.active) {
+          this.session.entries++;
+          this.counter++;
+          console.log(`Counter incremented: ${this.counter}`);
+        }
+      }
+    };
+
+    this.sseSource.onerror = (error) => {
+      console.error('SSE connection error:', error);
     };
   },
   methods: {
-    // Fetch the latest counter value and update the session
-    async fetchCounter() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/entries');
-        if (response.data && typeof response.data.counter === 'number') {
-          this.session.entries = response.data.counter; // Update entries
-        } else {
-          console.error('Unexpected response:', response.data);
-        }
-      } catch (err) {
-        console.log('Error fetching counter: ' + err.message);
-      }
-    },
-
-
-    // Start a new session with entries initialized to 0
-    async createSession() {
+    createSession() {
       if (!this.session.active) {
         this.session.active = true;
         this.session.entries = 0;
+        this.counter = 0; 
         console.log('Session started:', this.session);
-
-
-        // Set an interval to fetch data every 1 second
-        this.fetchInterval = setInterval(async () => {
-          await this.fetchCounter();
-        }, 1000);
       }
     },
 
     historyPage() {
       this.$router.push('/SessionHistory');
     },
-
 
     endSession() {
       if (this.session.active) {
@@ -99,20 +99,22 @@ export default {
     if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
       console.error("Please enter a valid positive number for the maximum entry limit.");
     }
-    const response = await axios.post('http://localhost:3000/api/entries/maxset', {
-      value: Number(this.maxEntryLimit)
-    });
+    const response = await axios.post('http://localhost:3000/api/entries/maxset', {value: (this.maxEntryLimit)});
     alert("Maximum entry limit set successfully!");
     console.log("Maximum entry limit set successfully!",response.data);
   } catch (error) {
     console.error("Failed to set maximum entry limit.");
   }
-}
-
+},
+  onUnmounted() {
+    if (this.sseSource) {
+      this.sseSource.close(); // Clean up SSE connection on component destruction
+      console.log('SSE connection closed.');
+    }
   },
+  }
 };
 </script>
-
 
 <style scoped>
 .main {
