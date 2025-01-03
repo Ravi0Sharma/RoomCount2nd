@@ -42,24 +42,30 @@ client.on('connect', () => {
     });
 });
 
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-// Import and use routes
-const entriesController = require('./src/controllers/entries');
-app.use('/api', entriesController); 
+    // Add client to SSE clients list
+    sseClients.push(res);
 
-// When a message is received
-client.on('message', (topic) => {
-    console.log(`Received message on ${topic}`);
-    
-// Sending the POST request to increment the counter
-axios.post('http://localhost:3000/api/entries')
-.then(response => {
-  console.log('Counter incremented successfully:', response.data);
-})
-.catch(error => {
-  console.error('Error incrementing counter:', error);
+    // Send an initial message (optional)
+    res.write('data: {"message": "Connected to server"}\n\n');
+
+    // Clean up when the client disconnects
+    req.on('close', () => {
+        sseClients = sseClients.filter((client) => client !== res);
+    });
 });
 
+// Broadcasting MQTT messages to SSE clients
+client.on('message', (topic, message) => {
+    const payload = { topic, message: message.toString() };
+    console.log(`Broadcasting: ${JSON.stringify(payload)}`);
+    sseClients.forEach((res) => {
+        res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    });
 });
 
 
@@ -71,6 +77,7 @@ function publishToTopic(topic, payload) {
     });
 }
 
+/*
 // Define the /entries/maxset route directly in app.js
 app.post('/api/entries/maxset', async (req, res) => {
     try {
@@ -100,6 +107,7 @@ app.post('/api/entries/maxset', async (req, res) => {
         });
     }
 });
+*/
 
 // Handle errors
 client.on('error', (err) => {
