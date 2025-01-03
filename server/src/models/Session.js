@@ -3,6 +3,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var sessionSchema = new mongoose.Schema({
+    username: {
+        type: String, 
+        required: true,
+        ref: 'User', 
+    },
+
     max_count: {
         type: Number,
         min: 1,
