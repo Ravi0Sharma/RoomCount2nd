@@ -23,8 +23,8 @@
   </div>
 </template>
 
-
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -32,32 +32,8 @@ export default {
         active: false,
         entries: 0,
       },
-      counter: 0, // Counter variable for session entries 
       maxEntryLimit: 0,
-      sseSource: null, // SSE EventSource
-    };
-  },
-  created() {
-    // Connect to the SSE endpoint
-    this.sseSource = new EventSource('/events');
-
-    // Listen for incoming messages
-    this.sseSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('Received SSE message:', data);
-
-      // Handle RoomCount entry topic
-      if (data.topic === 'RoomCount/1/entry') {
-        if (this.session.active) {
-          this.session.entries++;
-          this.counter++;
-          console.log(`Counter incremented: ${this.counter}`);
-        }
-      }
-    };
-
-    this.sseSource.onerror = (error) => {
-      console.error('SSE connection error:', error);
+      pollingInterval: null, // For managing polling
     };
   },
   methods: {
@@ -65,8 +41,10 @@ export default {
       if (!this.session.active) {
         this.session.active = true;
         this.session.entries = 0;
-        this.counter = 0; 
         console.log('Session started:', this.session);
+
+        // Start polling for entries
+        this.pollingInterval = setInterval(this.entries, 5000); // Poll every 5 seconds
       }
     },
 
@@ -74,55 +52,68 @@ export default {
       this.$router.push('/SessionHistory');
     },
 
-    endSession() {
+    async endSession() {
       if (this.session.active) {
         console.log('Ending session', this.session);
 
-        // Reset session and counter data
-        this.session.entries = 0;
-        this.counter = 0; 
-        this.session.active = false;
+        axios.post('http://localhost:3000/api/session', {
+          entries: this.session.entries,
+          max_count: this.maxEntryLimit,
+        })
+          .then((response) => {
+            console.log(response.data.message);
+            this.session.entries = 0;
+            this.maxEntryLimit = 0;
+            this.session.active = false;
 
-        console.log('Session ended.');
+            // Stop polling
+            clearInterval(this.pollingInterval);
+          })
+          .catch((err) => {
+            console.error('Error updating counter:', err.message);
+          });
+      } else {
+        console.log('Session not active');
       }
     },
 
-    maxSet() {
-      if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
-        console.error('Please enter a valid positive number for the maximum entry limit.');
-        return;
-      }
-
-      const topic = 'RoomCount/1/maxset';
-      const payload = JSON.stringify({ maxLimit: this.maxEntryLimit });
-
-      // Publish the max limit via a POST request to your server
-      fetch('/api/maxset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: payload,
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error('Failed to set max entry limit');
-          return response.json();
-        })
-        .then((data) => {
-          console.log('Max entry limit set successfully!', data);
-          alert('Max entry limit set successfully!');
-        })
-        .catch((error) => {
-          console.error('Error setting max entry limit:', error);
-          alert('Error setting max entry limit.');
+    async maxSet() {
+      try {
+        if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
+          console.error('Please enter a valid positive number for the maximum entry limit.');
+          return; // Stop execution if validation fails
+        }
+        const response = await axios.post('http://localhost:3000/api/entries/maxset', {
+          value: Number(this.maxEntryLimit),
         });
+        alert('Maximum entry limit set successfully!');
+        console.log('Maximum entry limit set successfully!', response.data);
+      } catch (error) {
+        console.error('Failed to set maximum entry limit:', error.message);
+      }
     },
-  },
-  onUnmounted() {
-    if (this.sseSource) {
-      this.sseSource.close(); // Clean up SSE connection on component destruction
-      console.log('SSE connection closed.');
-    }
+
+    async entries() {
+      try {
+        // Fetch the latest entry count from the server
+        const response = await axios.get('http://localhost:3000/api/entries');
+        if (response.data && typeof response.data.entries === 'number') {
+          this.session.entries = response.data.entries;
+          console.log('Updated entries:', this.session.entries);
+        } else {
+          console.warn('Received empty or invalid entries data:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching entries:', error.message);
+      }
+    },
+
+    onUnmounted() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval); // Stop polling when the component is destroyed
+        console.log('Polling stopped');
+      }
+    },
   },
 };
 </script>
