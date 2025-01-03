@@ -85,7 +85,13 @@ client.on('error', (err) => {
 
 // Import and use routes
 const usersController = require('./src/controllers/users');
-app.use('/api', usersController); // Mount the usersController on /api/users
+app.use('/api', usersController); 
+
+const sessionsController = require('./src/controllers/Sessions');
+app.use('/api', sessionsController); 
+
+const entriesController = require('./src/controllers/entries');
+app.use('/api', entriesController); 
 
 // 404 Handler
 app.use('*', (req, res) => {

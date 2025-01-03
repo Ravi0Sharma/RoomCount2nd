@@ -41,7 +41,7 @@ router.get('/entries', async function (req, res, next) {
 });
 
 //Post MAX entries 
-router.post('/api/entries/maxset', async (req, res) => {
+router.post('/entries/maxset', async (req, res) => {
     try {
         const { value } = req.body;
 
