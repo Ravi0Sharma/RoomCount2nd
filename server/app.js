@@ -13,6 +13,16 @@ app.use(express.json()); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded payloads
 app.use(cors()); // Enable CORS
 
+// Import and use routes
+const usersController = require('./src/controllers/users');
+app.use('/api', usersController); 
+
+const sessionsController = require('./src/controllers/Sessions');
+app.use('/api', sessionsController); 
+
+const entriesController = require('./src/controllers/entries');
+app.use('/api', entriesController); 
+
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function (err) {
     console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
@@ -29,24 +39,6 @@ const mqttPort = 1883;
 // Connect to the MQTT broker
 const client = mqtt.connect(mqttServer, { port: mqttPort });
 
-
-client.on('connect', () => {
-    console.log('Connected to MQTT Broker');
-    
-    client.subscribe('RoomCount/1/entry', (err) => {
-        if (!err) {
-            console.log('Subscribed to RoomCount/1/entry');
-        } else {
-            console.log('Failed to subscribe: ' + err);
-        }
-    });
-});
-
-
-// Import and use routes
-const entriesController = require('./src/controllers/entries');
-app.use('/api', entriesController); 
-
 // When a message is received
 client.on('message', (topic) => {
     console.log(`Received message on ${topic}`);
@@ -62,54 +54,10 @@ axios.post('http://localhost:3000/api/entries')
 
 });
 
-
-function publishToTopic(topic, payload) {
-    client.publish(topic, payload, function (err) {
-        if (err) {
-            console.error(`Error publishing to topic ${topic}: ${err}`);
-        }
-    });
-}
-
-// Define the /entries/maxset route directly in app.js
-app.post('/api/entries/maxset', async (req, res) => {
-    try {
-        const { value } = req.body;
-
-        if (typeof value === 'number') {
-            const topic = 'RoomCount/1/SUB_MAX';
-            const payload = value.toString();
-
-            // Publish the payload to MQTT
-            publishToTopic(topic, payload);
-
-            res.status(200).json({
-                message: 'maxSet updated and published successfully!',
-                maxSet: value,
-            });
-        } else {
-            res.status(400).json({
-                message: 'Invalid value. "value" must be a number.',
-            });
-        }
-    } catch (err) {
-        console.error('Error occurred while setting maxSet:', err);
-        res.status(500).json({
-            message: 'An error occurred while processing the request.',
-            error: err.message,
-        });
-    }
-});
-
 // Handle errors
 client.on('error', (err) => {
     console.error('MQTT connection error: ' + err);
 });
-
-
-// Import and use routes
-const usersController = require('./src/controllers/users');
-app.use('/api', usersController); // Mount the usersController on /api/users
 
 // 404 Handler
 app.use('*', (req, res) => {
@@ -121,4 +69,4 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-module.exports = { app, publishToTopic };
+module.exports = {app};

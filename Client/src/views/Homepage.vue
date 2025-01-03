@@ -23,11 +23,8 @@
   </div>
 </template>
 
-
 <script>
 import axios from 'axios';
-
-
 export default {
   data() {
     return {
@@ -35,38 +32,19 @@ export default {
         active: false,
         entries: 0,
       },
-      fetchInterval: null,
-      maxEntryLimit: 0
+      maxEntryLimit: 0,
+      pollingInterval: null, // For managing polling
     };
   },
   methods: {
-    // Fetch the latest counter value and update the session
-    async fetchCounter() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/entries');
-        if (response.data && typeof response.data.counter === 'number') {
-          this.session.entries = response.data.counter; // Update entries
-        } else {
-          console.error('Unexpected response:', response.data);
-        }
-      } catch (err) {
-        console.log('Error fetching counter: ' + err.message);
-      }
-    },
-
-
-    // Start a new session with entries initialized to 0
-    async createSession() {
+    createSession() {
       if (!this.session.active) {
         this.session.active = true;
         this.session.entries = 0;
         console.log('Session started:', this.session);
 
-
-        // Set an interval to fetch data every 1 second
-        this.fetchInterval = setInterval(async () => {
-          await this.fetchCounter();
-        }, 1000);
+        // Start polling for entries
+        this.pollingInterval = setInterval(this.entries, 5000); // Poll every 5 seconds
       }
     },
 
@@ -74,45 +52,71 @@ export default {
       this.$router.push('/SessionHistory');
     },
 
-
-    endSession() {
+    async endSession() {
       if (this.session.active) {
         console.log('Ending session', this.session);
 
-
-        axios.post('http://localhost:3000/api/session', { value: 0 })
+        axios.post('http://localhost:3000/api/session', {
+          entries: this.session.entries,
+          max_count: this.maxEntryLimit,
+        })
           .then((response) => {
             console.log(response.data.message);
             this.session.entries = 0;
+            this.maxEntryLimit = 0;
             this.session.active = false;
-            clearInterval(this.fetchInterval);
+
+            // Stop polling
+            clearInterval(this.pollingInterval);
           })
           .catch((err) => {
             console.error('Error updating counter:', err.message);
           });
+      } else {
+        console.log('Session not active');
       }
     },
 
     async maxSet() {
-  try {
-    // Validate input
-    if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
-      console.error("Please enter a valid positive number for the maximum entry limit.");
-    }
-    const response = await axios.post('http://localhost:3000/api/entries/maxset', {
-      value: Number(this.maxEntryLimit)
-    });
-    alert("Maximum entry limit set successfully!");
-    console.log("Maximum entry limit set successfully!",response.data);
-  } catch (error) {
-    console.error("Failed to set maximum entry limit.");
-  }
-}
+      try {
+        if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
+          console.error('Please enter a valid positive number for the maximum entry limit.');
+          return; // Stop execution if validation fails
+        }
+        const response = await axios.post('http://localhost:3000/api/entries/maxset', {
+          value: Number(this.maxEntryLimit),
+        });
+        alert('Maximum entry limit set successfully!');
+        console.log('Maximum entry limit set successfully!', response.data);
+      } catch (error) {
+        console.error('Failed to set maximum entry limit:', error.message);
+      }
+    },
 
+    async entries() {
+      try {
+        // Fetch the latest entry count from the server
+        const response = await axios.get('http://localhost:3000/api/entries');
+        if (response.data && typeof response.data.entries === 'number') {
+          this.session.entries = response.data.entries;
+          console.log('Updated entries:', this.session.entries);
+        } else {
+          console.warn('Received empty or invalid entries data:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching entries:', error.message);
+      }
+    },
+
+    onUnmounted() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval); // Stop polling when the component is destroyed
+        console.log('Polling stopped');
+      }
+    },
   },
 };
 </script>
-
 
 <style scoped>
 .main {

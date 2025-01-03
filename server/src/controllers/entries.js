@@ -1,4 +1,5 @@
 var express = require('express');
+const { publishToTopic } = require('../../mqttClient');
 var router = express.Router();
 
 // Initialize a entries 
@@ -28,7 +29,7 @@ router.post('/entries', async function (req, res, next) {
 router.get('/entries', async function (req, res, next) {
     try {
         res.status(200).json({
-            counter: counter 
+            entries: entries
         });
     } catch (err) {
         console.error("Error occurred while retrieving counter:", err);
@@ -38,6 +39,35 @@ router.get('/entries', async function (req, res, next) {
           error: err.message
         });
     }
+});
+
+//Post MAX entries 
+router.post('/entries/maxset', async (req, res) => {
+    try {
+        const { value } = req.body;
+
+        if (typeof value === 'number') {
+            const topic = 'RoomCount/1/SUB_MAX';
+            const payload = value.toString();
+
+            publishToTopic(topic, payload);
+            res.status(200).json({
+                message: 'maxSet updated and published successfully!',
+                maxSet: value,
+            });
+        } else {
+            res.status(400).json({
+                message: 'Invalid value. "value" must be a number.',
+            });
+        }
+    } catch (err) {
+        console.error('Error occurred while setting maxSet:', err);
+        res.status(500).json({
+            message: 'An error occurred while processing the request.',
+            error: err.message,
+        });
+    }
+
 });
 
 
