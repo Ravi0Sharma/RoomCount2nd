@@ -1,4 +1,5 @@
 var express = require('express');
+const { publishToTopic } = require('../../mqttClient');
 var router = express.Router();
 
 // Initialize a entries 
@@ -49,6 +50,7 @@ router.post('/entries/maxset', async (req, res) => {
             const topic = 'RoomCount/1/SUB_MAX';
             const payload = value.toString();
 
+            publishToTopic(topic, payload);
             res.status(200).json({
                 message: 'maxSet updated and published successfully!',
                 maxSet: value,

@@ -13,6 +13,17 @@ app.use(express.json()); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded payloads
 app.use(cors()); // Enable CORS
 
+
+// Import and use routes
+const usersController = require('./src/controllers/users');
+app.use('/api', usersController); 
+
+const sessionsController = require('./src/controllers/Sessions');
+app.use('/api', sessionsController); 
+
+const entriesController = require('./src/controllers/entries');
+app.use('/api', entriesController); 
+
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function (err) {
     console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
@@ -69,29 +80,12 @@ client.on('message', (topic, message) => {
 });
 
 
-function publishToTopic(topic, payload) {
-    client.publish(topic, payload, function (err) {
-        if (err) {
-            console.error(`Error publishing to topic ${topic}: ${err}`);
-        }
-    });
-}
 
 // Handle errors
 client.on('error', (err) => {
     console.error('MQTT connection error: ' + err);
 });
 
-
-// Import and use routes
-const usersController = require('./src/controllers/users');
-app.use('/api', usersController); 
-
-const sessionsController = require('./src/controllers/Sessions');
-app.use('/api', sessionsController); 
-
-const entriesController = require('./src/controllers/entries');
-app.use('/api', entriesController); 
 
 // 404 Handler
 app.use('*', (req, res) => {
@@ -103,4 +97,4 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-module.exports = { app, publishToTopic };
+module.exports = { app, publishToTopic};
