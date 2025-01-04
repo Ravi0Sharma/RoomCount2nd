@@ -5,6 +5,7 @@ var router = express.Router();
 // Initialize a entries 
 var entries = 0;
 var surpass = 0; 
+var reset = 1; 
 
 // POST to increment the entries
 router.post('/entries', async function (req, res, next) {
@@ -26,6 +27,24 @@ router.post('/entries', async function (req, res, next) {
     }
 });
 
+// POST Reset Entries Count 
+router.post('/entries/reset', async function (req, res, next) {
+    try {
+
+        res.status(200).json({
+            message: 'POST to reset count successfully!',
+            reset: reset
+        });
+
+    } catch (err) {    
+        console.error("Error occurred while posting count:", err);
+        
+        res.status(500).json({
+          message: 'An error occurred while posting count',
+          error: err.message
+        });
+    }
+});
 // GET to retrieve the current counter value
 router.get('/entries', async function (req, res, next) {
     try {
