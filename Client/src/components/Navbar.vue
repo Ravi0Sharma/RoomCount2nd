@@ -5,7 +5,7 @@
     <!-- Navbar links displayed in normal view -->
     <BNavbarNav class="ms-auto mb-2 mb-lg-0">
       <BNavItem> <router-link to="/Homepage" class="nav-link">Home</router-link></BNavItem>
-      <BNavItem> <router-link to="/SessionHistory" class="nav-link">Book Appointment</router-link> </BNavItem>
+      <BNavItem> <router-link to="/SessionHistory" class="nav-link">SessionHistory</router-link> </BNavItem>
     </BNavbarNav>
 
     <BNavbarToggle target="nav-collapse"/>
@@ -35,7 +35,7 @@
 }
 
 .custom-dropdown .nav-link {
-  padding-left: 15px; /* Adjust padding for better alignment */
+  padding-left: 15px; 
 }
 </style>
 
@@ -51,7 +51,7 @@
 }
 
 .custom-dropdown .nav-link {
-  padding-left: 15px; /* Adjust padding for better alignment */
+  padding-left: 15px; 
 }
 </style>
 
