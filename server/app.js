@@ -66,17 +66,18 @@ console.log(`Received message on ${topic}`);
  
 if (topic === "Surpass"){
 
-axios.post('http://localhost:3000/api/')
+axios.post('http://localhost:3000/api/entries/surpass')
 .then(response => {
   console.log('Surpass data successfully posted:', response.data);
 })
 .catch(error => {
   console.error('Failed to post surpass data:', error);
+  
 });
 
+return; 
 }
 else {
-
 axios.post('http://localhost:3000/api/entries')
 .then(response => {
   console.log('Counter incremented successfully:', response.data);
