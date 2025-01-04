@@ -5,7 +5,7 @@
 
 unsigned long lastMeasurementTime = 0;
 const unsigned long cooldownTime = 3000;  // Cooldown period in milliseconds (3 seconds)
-int entries_count = 0;
+int volatile entries_count = 0;
 int serial_Begin_Rate = 9600; 
 
 Ultrasonic pinUltraSonic(ULTRASONIC_PIN);
