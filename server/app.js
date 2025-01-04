@@ -64,7 +64,7 @@ client.on('connect', () => {
 client.on('message', (topic) => {
 console.log(`Received message on ${topic}`);
  
-if (topic === "Surpass"){
+if (topic === 'RoomCount/1/surpass'){
 
 axios.post('http://localhost:3000/api/entries/surpass')
 .then(response => {
