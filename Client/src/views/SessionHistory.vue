@@ -39,7 +39,7 @@ export default {
     async fetchSessions() {
       try {
         const username = sessionStorage.getItem('username')
-        const response = await axios.get(`http://localhost:3000/api/session${username}`); 
+        const response = await axios.get(`http://localhost:3000/api/sessions/${username}`); 
         this.sessionHistory = response.data; 
       } catch (error) {
         console.error('Error fetching sessions:', error);
