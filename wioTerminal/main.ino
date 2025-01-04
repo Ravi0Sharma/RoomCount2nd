@@ -2,11 +2,11 @@
 #include "pin.h"
 #include "utils.h"
 #include "wifi.h"
+#include "mqtt.h"  
 
 int previous_count = -1;
 
 void setup() {
-
     tft.begin();
     tft.setRotation(3);
     pinMode(BUZZER_PIN, OUTPUT); //set buzzer pin to output 
@@ -20,7 +20,6 @@ void setup() {
 }
 
 void loop() {
-
   if (!client.connected()) {  // Connect to Mqtt if not connected
     MQTT_connect();
   }
@@ -34,7 +33,6 @@ void loop() {
     client.publish(TOPIC_PUB_ENTRY, String(entries_count).c_str());
     Serial.println("Sent Entry");
   } 
-
   if (entries_count > max_amount) {
     analogWrite(WIO_BUZZER, 128);
     delay(5000);
@@ -42,5 +40,5 @@ void loop() {
     client.publish(TOPIC_PUB_SURPASS, String("1").c_str());
     analogWrite(WIO_BUZZER, 0);
     delay(1000);
-}
+  }
 }
