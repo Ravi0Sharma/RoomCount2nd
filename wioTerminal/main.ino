@@ -44,4 +44,9 @@ void loop() {
 
   surpassCount++;
   }
+
+  if (entries_count <= max_amount) {
+    surpassCount = 0;  
+  }
+  
 }
