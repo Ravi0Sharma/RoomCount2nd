@@ -13,7 +13,7 @@
                   <ul class="session-details">
                     <li><strong>Max Count:</strong> {{ session.max_count }}</li>
                     <li><strong>Entries:</strong> {{ session.entries }}</li>
-                    <li><strong>Max Amount Surpassed:</strong> {{ session.max_amount_surpass }}</li>
+                    <li><strong>Max Amount Surpassed:</strong> {{ session.surpass}}</li>
                   </ul>
                 </li>
               </ul>
