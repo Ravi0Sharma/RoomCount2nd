@@ -6,7 +6,7 @@
         <BCard class="card">
           <div class="stats">
             <p>Entries:</p>
-            <h2>{{ session.entries }}</h2>
+            <h2>{{ session.sessionCounter}}</h2>
           </div>
           <BButton class="btn btn-success w-50" @click="createSession">Create Session</BButton>
           <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
@@ -24,13 +24,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+
 export default {
   data() {
     return {
       session: {
         active: false,
-        entries: 0,
+        sessionCounter: 0, // Session-specific entry counter
       },
       maxEntryLimit: 0,
       pollingInterval: null, // For managing polling
@@ -40,79 +41,96 @@ export default {
     createSession() {
       if (!this.session.active) {
         this.session.active = true;
-        this.session.entries = 0;
-        console.log('Session started:', this.session);
+        this.session.sessionCounter = 0; // Reset session-specific counter
+        console.log("Session started:", this.session);
 
         // Start polling for entries
-        this.pollingInterval = setInterval(this.entries, 5000); // Poll every 5 seconds
+        this.pollingInterval = setInterval(() => this.entries(), 3000); // Poll every 3 seconds
       }
     },
 
     historyPage() {
-      this.$router.push('/SessionHistory');
+      this.$router.push("/SessionHistory");
     },
 
     async endSession() {
       if (this.session.active) {
-        console.log('Ending session', this.session);
+        console.log("Ending session:", this.session);
 
-        axios.post('http://localhost:3000/api/session', {
-          entries: this.session.entries,
-          max_count: this.maxEntryLimit,
-          username: sessionStorage.getItem('username')
-        })
+        axios.post("http://localhost:3000/api/session", {
+            entries: this.session.sessionCounter, // Use session-specific counter
+            max_count: this.maxEntryLimit,
+            username: sessionStorage.getItem("username"),
+          })
           .then((response) => {
             console.log(response.data.message);
-            this.session.entries = 0;
-            this.maxEntryLimit = 0;
+
+            // Reset session-specific values
+            this.session.sessionCounter = 0;
             this.session.active = false;
 
             // Stop polling
             clearInterval(this.pollingInterval);
           })
           .catch((err) => {
-            console.error('Error updating counter:', err.message);
+            console.error("Error updating counter:", err.message);
           });
       } else {
-        console.log('Session not active');
+        console.log("Session not active");
       }
     },
 
     async maxSet() {
       try {
         if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
-          console.error('Please enter a valid positive number for the maximum entry limit.');
-          return; // Stop execution if validation fails
+          console.error(
+            "Please enter a valid positive number for the maximum entry limit."
+          );
+          return;
         }
-        const response = await axios.post('http://localhost:3000/api/entries/maxset', {
-          value: Number(this.maxEntryLimit),
-        });
-        alert('Maximum entry limit set successfully!');
-        console.log('Maximum entry limit set successfully!', response.data);
+        const response = await axios.post(
+          "http://localhost:3000/api/entries/maxset",
+          {
+            value: Number(this.maxEntryLimit),
+          }
+        );
+        alert("Maximum entry limit set successfully!");
+        console.log("Maximum entry limit set successfully!", response.data);
       } catch (error) {
-        console.error('Failed to set maximum entry limit:', error.message);
+        console.error("Failed to set maximum entry limit:", error.message);
       }
     },
 
     async entries() {
       try {
-        // Fetch the latest entry count from the server
-        const response = await axios.get('http://localhost:3000/api/entries');
-        if (response.data && typeof response.data.entries === 'number') {
-          this.session.entries = response.data.entries;
-          console.log('Updated entries:', this.session.entries);
+        // Fetch the latest total entry count from the server
+        const response = await axios.get("http://localhost:3000/api/entries");
+        if (response.data && typeof response.data.entries === "number") {
+          const newTotalEntries = response.data.entries;
+
+          if (this.session.active) {
+            // Increment sessionCounter based on the difference
+            const difference = newTotalEntries - this.session.entries;
+            if (difference > 0) {
+              this.session.sessionCounter += difference;
+            }
+          }
+
+          // Update total entries to the fetched value
+          this.session.entries = newTotalEntries;
+          console.log("Updated entries:", this.session.entries);
         } else {
-          console.warn('Received empty or invalid entries data:', response.data);
+          console.warn("Received invalid entries data:", response.data);
         }
       } catch (error) {
-        console.error('Error fetching entries:', error.message);
+        console.error("Error fetching entries:", error.message);
       }
     },
 
     onUnmounted() {
       if (this.pollingInterval) {
         clearInterval(this.pollingInterval); // Stop polling when the component is destroyed
-        console.log('Polling stopped');
+        console.log("Polling stopped");
       }
     },
   },
