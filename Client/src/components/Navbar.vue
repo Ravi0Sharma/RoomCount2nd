@@ -1,28 +1,60 @@
 <template>
-   <BNavbar toggleable="lg" variant="dark" v-b-color-mode="'dark'" expand="lg">
-      <BNavbarBrand class="brand">Room Count</BNavbarBrand>
-  
-      <BNavbarToggle target="nav-collapse"/>
-      <BCollapse id="nav-collapse" is-nav>
-  
-      <!-- Username-->
+  <BNavbar toggleable="lg" variant="dark" v-b-color-mode="'dark'" expand="lg">
+    <BNavbarBrand class="brand">Room Count</BNavbarBrand>
+
+    <!-- Navbar links displayed in normal view -->
+    <BNavbarNav class="ms-auto mb-2 mb-lg-0">
+      <BNavItem> <router-link to="/Homepage" class="nav-link">Home</router-link></BNavItem>
+      <BNavItem> <router-link to="/SessionHistory" class="nav-link">Book Appointment</router-link> </BNavItem>
+    </BNavbarNav>
+
+    <BNavbarToggle target="nav-collapse"/>
+    <BCollapse id="nav-collapse" is-nav>
+      <!-- Account Dropdown in collapsed view -->
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
-        <div class="d-none d-lg-flex align-items-center">
-        </div>
-  
-        <!-- Dropdown -->
-        <BDropdown class="custom-dropdown ml-3 text-center" variant="transparent" size="sm" right >
+        <BDropdown class="custom-dropdown ml-3 text-center" variant="transparent" size="sm" right>
           <template #button-content>
-            <span class="d-lg-none" style="margin-left: 26%; font-size: 16px; font-family: sans-serif; color: #FFFFFF;"> Account</span>
+            <span class="d-lg-none" style="font-size: 16px; font-family: sans-serif; color: #FFFFFF;">Account</span>
           </template>
           <BDropdownItem @click="logout">Logout</BDropdownItem>
         </BDropdown>
       </BNavbarNav>
     </BCollapse>
-    </BNavbar>
-  </template>
-  
-  
+  </BNavbar>
+</template>
+
+<style scoped>
+.nav-link {
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 16px;
+}
+
+.custom-dropdown {
+  margin-left: 10px;
+}
+
+.custom-dropdown .nav-link {
+  padding-left: 15px; /* Adjust padding for better alignment */
+}
+</style>
+
+<style scoped>
+.nav-link {
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 16px;
+}
+
+.custom-dropdown {
+  margin-left: 10px;
+}
+
+.custom-dropdown .nav-link {
+  padding-left: 15px; /* Adjust padding for better alignment */
+}
+</style>
+
   <script>
   export default {
     name: 'Navbar',
