@@ -65,10 +65,10 @@ export default {
     async endSession() {
 
       if (this.maxEntryLimit === 0 ){
-        alert ("The Set MAx limit must be a value greater than 0");
+        alert ("The Set Max limit must be a value greater than 0");
         return;
         }
-        
+
       if (this.session.active) {
         console.log("Ending session:", this.session);
 
