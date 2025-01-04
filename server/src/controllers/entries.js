@@ -27,7 +27,7 @@ router.post('/entries', async function (req, res, next) {
 });
 
 // POST to increment the Surpass
-router.post('/entries/surpass', async function (req, res, next) {
+router.post('/entries(', async function (req, res, next) {
     try {
         surpass++;
 
@@ -45,24 +45,6 @@ router.post('/entries/surpass', async function (req, res, next) {
         });
     }
 });
-
-
-// GET retrieve the current Surpass value 
-router.get('/entries', async function (req, res, next) {
-    try {
-        res.status(200).json({
-            surpass: surpass
-        });
-    } catch (err) {
-        console.error("Error occurred while retrieving surpass:", err);
-        
-        res.status(500).json({
-          message: 'An error occurred while retrieving the surpass',
-          error: err.message
-        });
-    }
-});
-
 
 // GET to retrieve the current counter value
 router.get('/entries', async function (req, res, next) {
