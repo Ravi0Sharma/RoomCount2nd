@@ -62,9 +62,21 @@ client.on('connect', () => {
 
 // When a message is received
 client.on('message', (topic) => {
-    console.log(`Received message on ${topic}`);
-    
-// Sending the POST request to increment the counter
+console.log(`Received message on ${topic}`);
+ 
+if (topic === "Surpass"){
+
+axios.post('http://localhost:3000/api/')
+.then(response => {
+  console.log('Surpass data successfully posted:', response.data);
+})
+.catch(error => {
+  console.error('Failed to post surpass data:', error);
+});
+
+}
+else {
+
 axios.post('http://localhost:3000/api/entries')
 .then(response => {
   console.log('Counter incremented successfully:', response.data);
@@ -72,6 +84,7 @@ axios.post('http://localhost:3000/api/entries')
 .catch(error => {
   console.error('Error incrementing counter:', error);
 });
+}
 
 });
 
