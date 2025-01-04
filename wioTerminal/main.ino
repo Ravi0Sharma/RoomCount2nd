@@ -10,7 +10,7 @@ int surpassCount = 0;
 void setup() {
     tft.begin();
     tft.setRotation(3);
-    pinMode(BUZZER_PIN, OUTPUT); //set buzzer pin to output 
+    pinMode(BUZZER_CTR, OUTPUT); //set buzzer pin to output 
 
     Serial.begin(serial_Begin_Rate); // Start serial communication
     client.setCallback(callback);
@@ -41,6 +41,7 @@ void loop() {
     client.publish(TOPIC_PUB_SURPASS, String("1").c_str());
     analogWrite(WIO_BUZZER, 0);
     delay(1000);
+    Screen_exceed(); 
 
   surpassCount++;
   }
@@ -48,5 +49,5 @@ void loop() {
   if (entries_count <= max_amount) {
     surpassCount = 0;  
   }
-  
+
 }
