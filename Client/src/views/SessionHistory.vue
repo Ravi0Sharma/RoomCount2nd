@@ -6,16 +6,18 @@
         <BCard class="card">
           <div class="stats">
             <p style="font-size: 18px;">Previous Sessions:</p>
-            <ul class="history-list">
-              <li v-for="(session, index) in sessionHistory" :key="index">
-                <p>Session {{ index + 1 }}:</p>
-                <ul class="session-details">
-                  <li><strong>Max Count:</strong> {{ session.max_count }}</li>
-                  <li><strong>Entries:</strong> {{ session.entries }}</li>
-                  <li><strong>Max Amount Surpassed:</strong> {{ session.max_amount_surpass }}</li>
-                </ul>
-              </li>
-            </ul>
+            <div class="history-container">
+              <ul class="history-list">
+                <li v-for="(session, index) in sessionHistory" :key="index">
+                  <p>Session {{ index + 1 }}:</p>
+                  <ul class="session-details">
+                    <li><strong>Max Count:</strong> {{ session.max_count }}</li>
+                    <li><strong>Entries:</strong> {{ session.entries }}</li>
+                    <li><strong>Max Amount Surpassed:</strong> {{ session.surpass}}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </BCard>
       </BCol>
@@ -76,6 +78,12 @@ export default {
   padding: 40px;
   width: 900px;
   border-radius: 15px;
+}
+
+.history-container {
+  max-height: 400px;  
+  overflow-y: auto;   
+  padding-right: 10px; 
 }
 
 .history-list {

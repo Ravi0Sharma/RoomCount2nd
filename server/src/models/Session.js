@@ -18,7 +18,7 @@ var sessionSchema = new mongoose.Schema({
         default : 0,
         min: 0 
     },
-    max_amount_surpass : {
+    surpass : {
     type : Number,
     default : 0,
     min: 0 

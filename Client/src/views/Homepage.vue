@@ -6,7 +6,7 @@
         <BCard class="card">
           <div class="stats">
             <p>Entries:</p>
-            <h2>{{ session.sessionCounter}}</h2>
+            <h2>{{ session.sessionCounter }}</h2>
           </div>
           <BButton class="btn btn-success w-50" @click="createSession">Create Session</BButton>
           <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
@@ -31,21 +31,30 @@ export default {
     return {
       session: {
         active: false,
-        sessionCounter: 0, // Session-specific entry counter
+        sessionCounter: 0,
+        surpassCounter: 0,
+        entries: 0,
       },
       maxEntryLimit: 0,
-      pollingInterval: null, // For managing polling
+      pollingInterval: null,
     };
   },
   methods: {
     createSession() {
       if (!this.session.active) {
         this.session.active = true;
-        this.session.sessionCounter = 0; // Reset session-specific counter
+        this.session.sessionCounter = 0;
+        this.session.surpassCounter = 0;
         console.log("Session started:", this.session);
 
-        // Start polling for entries
-        this.pollingInterval = setInterval(() => this.entries(), 3000); // Poll every 3 seconds
+        this.pollingInterval = setInterval(() => {
+          if (this.session.active) {
+            this.entries();
+            this.surpass();
+          }
+        }, 3000); // Poll every 3 seconds
+      } else {
+        alert("There is a session running");
       }
     },
 
@@ -54,27 +63,34 @@ export default {
     },
 
     async endSession() {
+
+      if (this.maxEntryLimit === 0 ){
+        alert ("The Set Max limit must be a value greater than 0");
+        return;
+        }
+
       if (this.session.active) {
         console.log("Ending session:", this.session);
 
-        axios.post("http://localhost:3000/api/session", {
-            entries: this.session.sessionCounter, // Use session-specific counter
+        try {
+          const response = await axios.post("http://localhost:3000/api/session", {
+            entries: this.session.sessionCounter,
             max_count: this.maxEntryLimit,
+            surpass: this.session.surpassCounter,
             username: sessionStorage.getItem("username"),
-          })
-          .then((response) => {
-            console.log(response.data.message);
-
-            // Reset session-specific values
-            this.session.sessionCounter = 0;
-            this.session.active = false;
-
-            // Stop polling
-            clearInterval(this.pollingInterval);
-          })
-          .catch((err) => {
-            console.error("Error updating counter:", err.message);
           });
+          console.log(response.data.message);
+
+          // Reset session-specific values
+          this.session.sessionCounter = 0;
+          this.session.surpassCounter = 0;
+          this.session.active = false;
+
+          // Stop polling
+          clearInterval(this.pollingInterval);
+        } catch (err) {
+          console.error("Error updating counter:", err.message);
+        }
       } else {
         console.log("Session not active");
       }
@@ -83,17 +99,12 @@ export default {
     async maxSet() {
       try {
         if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
-          console.error(
-            "Please enter a valid positive number for the maximum entry limit."
-          );
+          console.error("Please enter a valid positive number for the maximum entry limit.");
           return;
         }
-        const response = await axios.post(
-          "http://localhost:3000/api/entries/maxset",
-          {
-            value: Number(this.maxEntryLimit),
-          }
-        );
+        const response = await axios.post("http://localhost:3000/api/entries/maxset", {
+          value: Number(this.maxEntryLimit),
+        });
         alert("Maximum entry limit set successfully!");
         console.log("Maximum entry limit set successfully!", response.data);
       } catch (error) {
@@ -103,7 +114,6 @@ export default {
 
     async entries() {
       try {
-        // Fetch the latest total entry count from the server
         const response = await axios.get("http://localhost:3000/api/entries");
         if (response.data && typeof response.data.entries === "number") {
           const newTotalEntries = response.data.entries;
@@ -114,16 +124,35 @@ export default {
             if (difference > 0) {
               this.session.sessionCounter += difference;
             }
-          }
 
-          // Update total entries to the fetched value
-          this.session.entries = newTotalEntries;
-          console.log("Updated entries:", this.session.entries);
-        } else {
-          console.warn("Received invalid entries data:", response.data);
+            // Update total entries to the fetched value
+            this.session.entries = newTotalEntries;
+          }
         }
       } catch (error) {
         console.error("Error fetching entries:", error.message);
+      }
+    },
+
+    async surpass() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/entries/surpass");
+        if (response.data && typeof response.data.surpass === "number") {
+          const newSurpassCount = response.data.surpass;
+
+          if (this.session.active && newSurpassCount > this.session.surpassCounter) {
+            // Update surpassCounter based on the difference
+
+            if (this.session.active && newSurpassCount > this.session.surpassCounter) {
+            const difference = newSurpassCount - this.session.surpassCounter;
+            this.session.surpassCounter += difference;
+
+            alert("Entries have surpassed the maximum amount allowed");
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching surpass data:", error.message);
       }
     },
 

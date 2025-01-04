@@ -8,13 +8,14 @@ router.post('/session', async function (req, res, next) {
     var session = new Session ({
         max_count: req.body.max_count,
         entries: req.body.entries,
-        username: req.body.username
+        username: req.body.username,
+        surpass: req.body.surpass
     });
 
     try {
         await session.save();
         res.status(201).json({
-            message: "Session created successfully",
+            message: "Session Posted successfully",
             session: session
         });
 

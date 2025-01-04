@@ -4,6 +4,7 @@ var router = express.Router();
 
 // Initialize a entries 
 var entries = 0;
+var surpass = 0; 
 
 // POST to increment the entries
 router.post('/entries', async function (req, res, next) {
@@ -36,6 +37,43 @@ router.get('/entries', async function (req, res, next) {
         
         res.status(500).json({
           message: 'An error occurred while retrieving the counter.',
+          error: err.message
+        });
+    }
+});
+
+// POST to increment the Surpass
+router.post('/entries/surpass', async function (req, res, next) {
+    try {
+        surpass++;
+
+        res.status(200).json({
+            message: 'Surpass incremented successfully!',
+            surpass: surpass
+        });
+
+    } catch (err) {
+        console.error("Error occurred while incrementing Surpass:", err);
+        
+        res.status(500).json({
+          message: 'An error occurred while incrementing the Surpass',
+          error: err.message
+        });
+    }
+});
+
+
+// GET retrieve the current Surpass value 
+router.get('/entries/surpass', async function (req, res, next) {
+    try {
+        res.status(200).json({
+            surpass: surpass
+        });
+    } catch (err) {
+        console.error("Error occurred while retrieving surpass:", err);
+        
+        res.status(500).json({
+          message: 'An error occurred while retrieving the surpass',
           error: err.message
         });
     }

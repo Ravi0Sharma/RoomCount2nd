@@ -38,7 +38,7 @@ void loop() {
     analogWrite(WIO_BUZZER, 128);
     delay(3000);
 
-    client.publish(TOPIC_PUB_SURPASS, String("1").c_str());
+    client.publish(TOPIC_PUB_SURPASS, String("Surpass").c_str());
     analogWrite(WIO_BUZZER, 0);
     delay(1000);
     Screen_exceed(); 
@@ -48,6 +48,7 @@ void loop() {
 
   if (entries_count <= max_amount) {
     surpassCount = 0;  
+    entries_count = 0;
   }
 
 }

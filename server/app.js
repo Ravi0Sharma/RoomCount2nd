@@ -49,13 +49,34 @@ client.on('connect', () => {
             console.log('Failed to subscribe: ' + err);
         }
     });
+
+    client.subscribe('RoomCount/1/surpass', (err) => {
+        if (!err) {
+            console.log('Subscribed to RoomCount/1/surpass');
+        } else {
+            console.log('Failed to subscribe: ' + err);
+        }
+    });
+
 });
 
 // When a message is received
 client.on('message', (topic) => {
-    console.log(`Received message on ${topic}`);
-    
-// Sending the POST request to increment the counter
+console.log(`Received message on ${topic}`);
+ 
+if (topic === 'RoomCount/1/surpass'){
+
+axios.post('http://localhost:3000/api/entries/surpass')
+.then(response => {
+  console.log('Surpass data successfully posted:', response.data);
+})
+.catch(error => {
+  console.error('Failed to post surpass data:', error);
+  
+});
+return; 
+}
+else {
 axios.post('http://localhost:3000/api/entries')
 .then(response => {
   console.log('Counter incremented successfully:', response.data);
@@ -63,6 +84,7 @@ axios.post('http://localhost:3000/api/entries')
 .catch(error => {
   console.error('Error incrementing counter:', error);
 });
+}
 
 });
 
