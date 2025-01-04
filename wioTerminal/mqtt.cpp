@@ -13,7 +13,7 @@ const char* mqtt_server = "broker.hivemq.com"; // MQTT server address
 // Topics for sending sensor data
 const char* TOPIC_PUB_ENTRY = "RoomCount/1/entry";
 const char* TOPIC_PUB_SURPASS = "RoomCount/1/surpass";
-const char* TOPIC_SUB_MAX = "RoomCount/1/max_amount"; 
+const char* TOPIC_SUB_MAX = "RoomCount/1/SUB_MAX"; 
 
 // Connect to MQTT broker
 void MQTT_connect() {

@@ -17,7 +17,7 @@ extern void Screen_connected(); // External declaration for the Screen_connected
 extern void Screen_result(int entries_count); 
 
 
-extern void void Screen_exceed();
+extern void Screen_exceed();
 
 // External declaration for the Screen_connected() function
 extern void Screen_connected();
