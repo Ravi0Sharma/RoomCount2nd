@@ -32,6 +32,7 @@ export default {
       session: {
         active: false,
         sessionCounter: 0, // Session-specific entry counter
+        surpassCounter: 0
       },
       maxEntryLimit: 0,
       pollingInterval: null, // For managing polling
@@ -41,10 +42,10 @@ export default {
     createSession() {
       if (!this.session.active) {
         this.session.active = true;
-        this.session.sessionCounter = 0; // Reset session-specific counter
+        this.session.sessionCounter = 0; 
+        this.session.surpassCounter = 0; 
         console.log("Session started:", this.session);
 
-        // Start polling for entries
         this.pollingInterval = setInterval(() => this.entries(), 3000); // Poll every 3 seconds
       }
     },
@@ -60,6 +61,7 @@ export default {
         axios.post("http://localhost:3000/api/session", {
           entries: this.session.sessionCounter, // Use session-specific counter
           max_count: this.maxEntryLimit,
+          surpass: this.surpassCounter,
           username: sessionStorage.getItem("username"),
         })
           .then((response) => {
