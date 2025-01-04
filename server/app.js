@@ -49,6 +49,15 @@ client.on('connect', () => {
             console.log('Failed to subscribe: ' + err);
         }
     });
+
+    client.subscribe('RoomCount/1/surpass', (err) => {
+        if (!err) {
+            console.log('Subscribed to RoomCount/1/surpass');
+        } else {
+            console.log('Failed to subscribe: ' + err);
+        }
+    });
+
 });
 
 // When a message is received
