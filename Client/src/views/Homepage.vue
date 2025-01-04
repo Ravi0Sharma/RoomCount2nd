@@ -44,7 +44,7 @@ export default {
         console.log('Session started:', this.session);
 
         // Start polling for entries
-        this.pollingInterval = setInterval(this.entries, 5000); // Poll every 5 seconds
+        this.pollingInterval = setInterval(this.entries, 3000); // Poll every 3 seconds
       }
     },
 
