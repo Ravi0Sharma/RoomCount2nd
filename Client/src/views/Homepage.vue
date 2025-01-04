@@ -59,6 +59,7 @@ export default {
         axios.post('http://localhost:3000/api/session', {
           entries: this.session.entries,
           max_count: this.maxEntryLimit,
+          username: sessionStorage.getItem('username')
         })
           .then((response) => {
             console.log(response.data.message);

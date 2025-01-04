@@ -8,6 +8,7 @@ router.post('/session', async function (req, res, next) {
     var session = new Session ({
         max_count: req.body.max_count,
         entries: req.body.entries,
+        username: req.body.username
     });
 
     try {

@@ -6,7 +6,7 @@ var sessionSchema = new mongoose.Schema({
     username: {
         type: String, 
         required: true,
-        ref: 'User', 
+        ref: 'User'
     },
 
     max_count: {
