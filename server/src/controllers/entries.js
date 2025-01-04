@@ -27,7 +27,7 @@ router.post('/entries', async function (req, res, next) {
 });
 
 // POST to increment the Surpass
-router.post('/entries', async function (req, res, next) {
+router.post('/entries/surpass', async function (req, res, next) {
     try {
         surpass++;
 
