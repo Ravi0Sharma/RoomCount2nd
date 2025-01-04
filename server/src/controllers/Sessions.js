@@ -15,7 +15,7 @@ router.post('/session', async function (req, res, next) {
     try {
         await session.save();
         res.status(201).json({
-            message: "Session created successfully",
+            message: "Session Posted successfully",
             session: session
         });
 
