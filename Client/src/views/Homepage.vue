@@ -6,7 +6,7 @@
         <BCard class="card">
           <div class="stats">
             <p>Entries:</p>
-            <h2>{{ session.sessionCounter}}</h2>
+            <h2>{{ session.sessionCounter }}</h2>
           </div>
           <BButton class="btn btn-success w-50" @click="createSession">Create Session</BButton>
           <BButton class="btn btn-danger w-50" @click="endSession">End Session</BButton>
@@ -58,10 +58,10 @@ export default {
         console.log("Ending session:", this.session);
 
         axios.post("http://localhost:3000/api/session", {
-            entries: this.session.sessionCounter, // Use session-specific counter
-            max_count: this.maxEntryLimit,
-            username: sessionStorage.getItem("username"),
-          })
+          entries: this.session.sessionCounter, // Use session-specific counter
+          max_count: this.maxEntryLimit,
+          username: sessionStorage.getItem("username"),
+        })
           .then((response) => {
             console.log(response.data.message);
 
@@ -124,6 +124,17 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching entries:", error.message);
+      }
+    },
+
+    async Surpass() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/entries/surpass");
+        console.log("Fetched surpass data:", response.data);
+        return response.data; 
+      } catch (error) {
+        console.error("Error fetching surpass data:", error.message);
+        throw error; 
       }
     },
 
