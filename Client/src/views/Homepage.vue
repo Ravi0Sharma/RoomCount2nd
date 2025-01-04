@@ -142,10 +142,13 @@ export default {
 
           if (this.session.active && newSurpassCount > this.session.surpassCounter) {
             // Update surpassCounter based on the difference
+
+            if (this.session.active && newSurpassCount > this.session.surpassCounter) {
             const difference = newSurpassCount - this.session.surpassCounter;
             this.session.surpassCounter += difference;
 
             alert("Entries have surpassed the maximum amount allowed");
+            }
           }
         }
       } catch (error) {
