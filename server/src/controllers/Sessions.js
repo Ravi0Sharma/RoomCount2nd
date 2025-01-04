@@ -8,6 +8,7 @@ router.post('/session', async function (req, res, next) {
     var session = new Session ({
         max_count: req.body.max_count,
         entries: req.body.entries,
+        username: req.body.username
     });
 
     try {
@@ -27,16 +28,19 @@ router.post('/session', async function (req, res, next) {
     }
 });
 
-// Get all sessions
-router.get('/sessions', async function (req, res) {
+// Get sessions by username
+router.get('/sessions/:username', async function (req, res) {
     try {
-        const sessions = await Session.find(); // Fetch all sessions
+        const { username } = req.params; 
+
+        // Fetch sessions where the username matches
+        const sessions = await Session.find({ username: username });
 
         if (!sessions || sessions.length === 0) {
-            return res.status(404).json({ "message": "No sessions found" });
+            return res.status(404).json({ "message": `No sessions found for ${username}` });
         }
 
-        res.json(sessions);
+        res.json(sessions); 
     } catch (err) {
         console.error("Error occurred while fetching sessions:", err);
         res.status(500).json({
