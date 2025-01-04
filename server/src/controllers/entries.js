@@ -31,10 +31,14 @@ router.post('/entries', async function (req, res, next) {
 router.post('/entries/reset', async function (req, res, next) {
     try {
 
+        const topic = 'RoomCount/1/RESET_COUNT';
+        const payload = reset.toString();
+        publishToTopic(topic, payload);
+        
         res.status(200).json({
-            message: 'POST to reset count successfully!',
-            reset: reset
+            message: ' published reset count successfully!',
         });
+        
 
     } catch (err) {    
         console.error("Error occurred while posting count:", err);
@@ -45,6 +49,7 @@ router.post('/entries/reset', async function (req, res, next) {
         });
     }
 });
+
 // GET to retrieve the current counter value
 router.get('/entries', async function (req, res, next) {
     try {
