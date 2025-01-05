@@ -72,13 +72,13 @@ export default {
 
     async endSession() {
 
-      if (this.maxEntryLimit === 0 ){
+      if (this.session.active) {
+        console.log("Ending session:", this.session);
+
+        if (this.maxEntryLimit === 0 ){
         alert ("The Set Max limit must be a value greater than 0");
         return;
         }
-
-      if (this.session.active) {
-        console.log("Ending session:", this.session);
 
         try {
           const response = await axios.post("http://localhost:3000/api/session", {
@@ -101,10 +101,12 @@ export default {
         }
       } else {
         console.log("Session not active");
+        alert("Session not active");
       }
     },
 
     async maxSet() {
+      if (this.session.active) {
       try {
         if (isNaN(this.maxEntryLimit) || this.maxEntryLimit <= 0) {
           console.error("Please enter a valid positive number for the maximum entry limit.");
@@ -117,7 +119,11 @@ export default {
         console.log("Maximum entry limit set successfully!", response.data);
       } catch (error) {
         console.error("Failed to set maximum entry limit:", error.message);
+        }
+      }else {
+       alert("There is not a session running");
       }
+
     },
 
     async entries() {
