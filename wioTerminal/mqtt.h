@@ -11,6 +11,7 @@ extern void callback(char* topic, byte* payload, unsigned int length); // Declar
 extern const char* TOPIC_PUB_ENTRY; 
 extern const char* TOPIC_SUB_MAX;
 extern const char* TOPIC_PUB_SURPASS;
+extern const char* TOPIC_SUB_RESET; 
 
 
 extern volatile int max_amount;

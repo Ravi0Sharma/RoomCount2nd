@@ -6,7 +6,7 @@
 WiFiClient wioClient;
 PubSubClient client(wioClient);
 
-volatile int max_amount = 0;
+volatile int max_amount = 4;
 
 const char* mqtt_server = "broker.hivemq.com"; // MQTT server address
 
@@ -14,6 +14,7 @@ const char* mqtt_server = "broker.hivemq.com"; // MQTT server address
 const char* TOPIC_PUB_ENTRY = "RoomCount/1/entry";
 const char* TOPIC_PUB_SURPASS = "RoomCount/1/surpass";
 const char* TOPIC_SUB_MAX = "RoomCount/1/SUB_MAX"; 
+const char* TOPIC_SUB_RESET = "RoomCount/1/RESET_COUNT";  
 
 // Connect to MQTT broker
 void MQTT_connect() {
@@ -30,6 +31,7 @@ void MQTT_connect() {
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       client.subscribe(TOPIC_SUB_MAX);
+      client.subscribe(TOPIC_SUB_RESET);
       
     } else {
       // Attempts to connect to MQTT, updating the display and serial output until successful.
@@ -50,7 +52,6 @@ void MQTT_connect() {
   Screen_connected();
   delay(3000);
 }
-
 
 //Handles incoming MQTT messages
 void callback(char* topic, byte* payload, unsigned int length) {

@@ -47,6 +47,14 @@ export default {
         this.session.surpassCounter = 0;
         console.log("Session started:", this.session);
 
+      axios.post('http://localhost:3000/api/entries/reset')  
+      .then(response => {
+        console.log(response.data.message); 
+      })
+      .catch(error => {
+        console.error("Error resetting entries count:", error.response ? error.response.data : error.message);
+      });
+
         this.pollingInterval = setInterval(() => {
           if (this.session.active) {
             this.entries();
@@ -137,17 +145,16 @@ export default {
     async surpass() {
       try {
         const response = await axios.get("http://localhost:3000/api/entries/surpass");
+        
         if (response.data && typeof response.data.surpass === "number") {
           const newSurpassCount = response.data.surpass;
 
-          if (this.session.active && newSurpassCount > this.session.surpassCounter) {
-            // Update surpassCounter based on the difference
-
-            if (this.session.active && newSurpassCount > this.session.surpassCounter) {
-            const difference = newSurpassCount - this.session.surpassCounter;
-            this.session.surpassCounter += difference;
-
-            alert("Entries have surpassed the maximum amount allowed");
+          if (this.session.active) {
+            // Increment surpassCounter only if surpass count is greater than the last counter
+            if (newSurpassCount > this.session.surpassCounter) {
+              this.session.surpassCounter++;
+              console.log(`Surpass count incremented: ${this.session.surpassCounter}`);
+              alert("Max amount exceeded. Please set a new maximum amount.");
             }
           }
         }
