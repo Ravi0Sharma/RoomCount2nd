@@ -101,6 +101,7 @@ export default {
         }
       } else {
         console.log("Session not active");
+        alert("Session not active");
       }
     },
 
