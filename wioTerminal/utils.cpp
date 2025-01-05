@@ -18,7 +18,7 @@ void entries() {
     unsigned long currentTime = millis();
 
     if (currentTime - lastMeasurementTime >= cooldownTime) {
-      entries_count++;  // Increment the count (person entered)
+      entries_count++; 
       Serial.println(measurement);
       delay(1500);
     }

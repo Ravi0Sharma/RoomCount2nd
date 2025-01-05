@@ -31,6 +31,7 @@ void MQTT_connect() {
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       client.subscribe(TOPIC_SUB_MAX);
+      client.subscribe(TOPIC_SUB_RESET);
       
     } else {
       // Attempts to connect to MQTT, updating the display and serial output until successful.
@@ -51,7 +52,6 @@ void MQTT_connect() {
   Screen_connected();
   delay(3000);
 }
-
 
 //Handles incoming MQTT messages
 void callback(char* topic, byte* payload, unsigned int length) {
