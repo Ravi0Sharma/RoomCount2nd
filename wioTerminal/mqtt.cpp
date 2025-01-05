@@ -6,7 +6,7 @@
 WiFiClient wioClient;
 PubSubClient client(wioClient);
 
-volatile int max_amount = 0;
+volatile int max_amount = 4;
 
 const char* mqtt_server = "broker.hivemq.com"; // MQTT server address
 
