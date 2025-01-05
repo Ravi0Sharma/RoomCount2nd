@@ -4,14 +4,14 @@
 #include "wifi.h"
 #include "mqtt.h"  
 
-int previous_count = -1;
-int surpassCount = 0;
-bool startup = true;    
+int previous_count = -1;  /
+int surpassCount = 0;     
+bool startup = true;      
 
 void setup() {
     tft.begin();
     tft.setRotation(3);
-    pinMode(BUZZER_CTR, OUTPUT); //Set buzzer pin to output 
+    pinMode(BUZZER_CTR, OUTPUT); // Set buzzer pin to output 
 
     Serial.begin(serial_Begin_Rate); // Start serial communication
     client.setCallback(callback);
@@ -44,21 +44,23 @@ void loop() {
         }
     }
 
-    if (entries_count > max_amount && surpassCount < 3) {
+    if (entries_count > max_amount && surpassCount < 1) {
+        Screen_exceed();
         analogWrite(WIO_BUZZER, 128);
         delay(3000);
 
         client.publish(TOPIC_PUB_SURPASS, String("Surpass").c_str());
-        analogWrite(WIO_BUZZER, 0);
-        delay(1000);
-        Screen_exceed();
+        analogWrite(WIO_BUZZER, 128);
+        delay(2000);
 
+        analogWrite(WIO_BUZZER, 0);
+    
         surpassCount++;
+        Screen_result(entries_count);
     }
 
     // Reset surpass flag if back within range
     if (entries_count <= max_amount) {
         surpassCount = 0;
-        Screen_result(entries_count);
     }
 }
