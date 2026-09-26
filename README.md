@@ -9,6 +9,19 @@ Using sensors and user-friendly webiste, RoomCount provides instant updates on e
 The app alerts users when the number of entries exceeds the set threshold, helping to prevent overcrowding and maintain a comfortable environment.
 
 
+
+## **System Components**
+
+| Sensors |
+|---------|
+| Grove - [Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/) |
+
+
+## **System Design**
+![Screenshot_2025-01-05_at_17.51.37](uploads/b3ddd7b7bef4aea11e1955f5ed7c32d3/Screenshot_2025-01-05_at_17.51.37.png)
+
+
+
 ## **RoomCount Milestones Overview**
 
 The following is a structured list of requirements, including Functional Requirements (FR), Non-Functional Requirements (NFR), and User Stories, organized by milestones.
@@ -137,14 +150,3 @@ The following is a structured list of requirements, including Functional Require
 3.2. As a user, I want to be alerted when the entry limit is reached so that I can manage overcrowding.
 
 3.3. As a user, I want the web dashboard to display a message when the entry limit is exceeded so that I can monitor the situation remotely≤
-
-
-## **System Components**
-
-| Sensors |
-|---------|
-| Grove - [Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/) |
-
-
-## **System Design**
-![Screenshot_2025-01-05_at_17.51.37](uploads/b3ddd7b7bef4aea11e1955f5ed7c32d3/Screenshot_2025-01-05_at_17.51.37.png)
